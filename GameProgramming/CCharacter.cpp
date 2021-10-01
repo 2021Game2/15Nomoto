@@ -14,6 +14,7 @@ CCharacter::~CCharacter() {
 
 CCharacter::CCharacter()
 :mTag(EZERO)
+,mpModel(nullptr)
 {
 	//タスクリストに追加
 	CTaskManager::Get()->Add(this);

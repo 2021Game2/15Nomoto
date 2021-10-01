@@ -62,3 +62,9 @@ void CTriangle::Render(const CMatrix &m)
 	glVertex3f(mV[2].mX, mV[2].mY, mV[2].mZ);
 	glEnd();
 }
+
+CTriangle::CTriangle()
+	:mMaterialIdx(0)
+{
+	
+}
