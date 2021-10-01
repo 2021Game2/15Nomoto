@@ -56,6 +56,7 @@ Materialデータの読み込みと設定
 */
 CMaterial::CMaterial(CModelX* model)
 	: mpTextureFilename(nullptr)
+	,mVertexNum(0)
 {
 	//CModelXにマテリアルを追加する
 	model->mMaterial.push_back(this);
