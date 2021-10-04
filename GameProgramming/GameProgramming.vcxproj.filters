@@ -28,11 +28,11 @@
     <Filter Include="ソース ファイル\Lib\Game\Enemy">
       <UniqueIdentifier>{f0615be5-437d-422c-a2a8-983cece75dca}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Lib\Game\Map">
+      <UniqueIdentifier>{9536b859-446f-401f-abdc-836e901b4a17}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CBullet.cpp">
-      <Filter>ソース ファイル\Lib</Filter>
-    </ClCompile>
     <ClCompile Include="CModelX.cpp">
       <Filter>ソース ファイル\Lib\System</Filter>
     </ClCompile>
@@ -81,49 +81,13 @@
     <ClCompile Include="CXPlayer.cpp">
       <Filter>ソース ファイル\Lib\Game\Player</Filter>
     </ClCompile>
-    <ClCompile Include="CPlayer.cpp">
-      <Filter>ソース ファイル\Lib\Game\Player</Filter>
-    </ClCompile>
     <ClCompile Include="CXEnemy.cpp">
-      <Filter>ソース ファイル\Lib\Game\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="CEnemy2.cpp">
-      <Filter>ソース ファイル\Lib\Game\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="CEnemy.cpp">
       <Filter>ソース ファイル\Lib\Game\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="CCamera.cpp">
       <Filter>ソース ファイル\Lib\Game</Filter>
     </ClCompile>
-    <ClCompile Include="CCharacter.cpp">
-      <Filter>ソース ファイル\Lib\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="CCollider.cpp">
-      <Filter>ソース ファイル\Lib\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="CColliderLine.cpp">
-      <Filter>ソース ファイル\Lib\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="CColliderMesh.cpp">
-      <Filter>ソース ファイル\Lib\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="CColliderTriangle.cpp">
-      <Filter>ソース ファイル\Lib\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="CCollisionManager.cpp">
-      <Filter>ソース ファイル\Lib\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="CEffect.cpp">
-      <Filter>ソース ファイル\Lib\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="CTransform.cpp">
-      <Filter>ソース ファイル\Lib\Game</Filter>
-    </ClCompile>
     <ClCompile Include="CSceneGame.cpp">
-      <Filter>ソース ファイル\Lib\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="CXCharacter.cpp">
       <Filter>ソース ファイル\Lib\Game</Filter>
     </ClCompile>
     <ClCompile Include="CModel.cpp">
@@ -135,11 +99,38 @@
     <ClCompile Include="CTriangle.cpp">
       <Filter>ソース ファイル\Lib\System</Filter>
     </ClCompile>
+    <ClCompile Include="CMap.cpp">
+      <Filter>ソース ファイル\Lib\Game\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="CXCharacter.cpp">
+      <Filter>ソース ファイル\Lib\System</Filter>
+    </ClCompile>
+    <ClCompile Include="CTransform.cpp">
+      <Filter>ソース ファイル\Lib\System</Filter>
+    </ClCompile>
+    <ClCompile Include="CEffect.cpp">
+      <Filter>ソース ファイル\Lib\System</Filter>
+    </ClCompile>
+    <ClCompile Include="CColliderTriangle.cpp">
+      <Filter>ソース ファイル\Lib\System</Filter>
+    </ClCompile>
+    <ClCompile Include="CColliderMesh.cpp">
+      <Filter>ソース ファイル\Lib\System</Filter>
+    </ClCompile>
+    <ClCompile Include="CColliderLine.cpp">
+      <Filter>ソース ファイル\Lib\System</Filter>
+    </ClCompile>
+    <ClCompile Include="CCollider.cpp">
+      <Filter>ソース ファイル\Lib\System</Filter>
+    </ClCompile>
+    <ClCompile Include="CCollisionManager.cpp">
+      <Filter>ソース ファイル\Lib\System</Filter>
+    </ClCompile>
+    <ClCompile Include="CCharacter.cpp">
+      <Filter>ソース ファイル\Lib\System</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CBullet.h">
-      <Filter>ソース ファイル\Lib</Filter>
-    </ClInclude>
     <ClInclude Include="CModelX.h">
       <Filter>ソース ファイル\Lib\System</Filter>
     </ClInclude>
@@ -197,49 +188,13 @@
     <ClInclude Include="CXPlayer.h">
       <Filter>ソース ファイル\Lib\Game\Player</Filter>
     </ClInclude>
-    <ClInclude Include="CPlayer.h">
-      <Filter>ソース ファイル\Lib\Game\Player</Filter>
-    </ClInclude>
     <ClInclude Include="CXEnemy.h">
-      <Filter>ソース ファイル\Lib\Game\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="CEnemy2.h">
-      <Filter>ソース ファイル\Lib\Game\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="CEnemy.h">
       <Filter>ソース ファイル\Lib\Game\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="CCamera.h">
       <Filter>ソース ファイル\Lib\Game</Filter>
     </ClInclude>
-    <ClInclude Include="CCharacter.h">
-      <Filter>ソース ファイル\Lib\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="CCollider.h">
-      <Filter>ソース ファイル\Lib\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="CColliderLine.h">
-      <Filter>ソース ファイル\Lib\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="CColliderMesh.h">
-      <Filter>ソース ファイル\Lib\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="CColliderTriangle.h">
-      <Filter>ソース ファイル\Lib\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="CCollisionManager.h">
-      <Filter>ソース ファイル\Lib\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="CEffect.h">
-      <Filter>ソース ファイル\Lib\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="CTransform.h">
-      <Filter>ソース ファイル\Lib\Game</Filter>
-    </ClInclude>
     <ClInclude Include="CSceneGame.h">
-      <Filter>ソース ファイル\Lib\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="CXCharacter.h">
       <Filter>ソース ファイル\Lib\Game</Filter>
     </ClInclude>
     <ClInclude Include="CModel.h">
@@ -249,6 +204,36 @@
       <Filter>ソース ファイル\Lib\System</Filter>
     </ClInclude>
     <ClInclude Include="CTriangle.h">
+      <Filter>ソース ファイル\Lib\System</Filter>
+    </ClInclude>
+    <ClInclude Include="CMap.h">
+      <Filter>ソース ファイル\Lib\Game\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="CXCharacter.h">
+      <Filter>ソース ファイル\Lib\System</Filter>
+    </ClInclude>
+    <ClInclude Include="CTransform.h">
+      <Filter>ソース ファイル\Lib\System</Filter>
+    </ClInclude>
+    <ClInclude Include="CEffect.h">
+      <Filter>ソース ファイル\Lib\System</Filter>
+    </ClInclude>
+    <ClInclude Include="CColliderTriangle.h">
+      <Filter>ソース ファイル\Lib\System</Filter>
+    </ClInclude>
+    <ClInclude Include="CColliderMesh.h">
+      <Filter>ソース ファイル\Lib\System</Filter>
+    </ClInclude>
+    <ClInclude Include="CColliderLine.h">
+      <Filter>ソース ファイル\Lib\System</Filter>
+    </ClInclude>
+    <ClInclude Include="CCollider.h">
+      <Filter>ソース ファイル\Lib\System</Filter>
+    </ClInclude>
+    <ClInclude Include="CCollisionManager.h">
+      <Filter>ソース ファイル\Lib\System</Filter>
+    </ClInclude>
+    <ClInclude Include="CCharacter.h">
       <Filter>ソース ファイル\Lib\System</Filter>
     </ClInclude>
   </ItemGroup>

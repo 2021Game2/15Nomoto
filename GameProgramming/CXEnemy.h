@@ -13,7 +13,6 @@ public:
 	//ƒRƒ‰ƒCƒ_‚ÌéŒ¾
 	CCollider mColSphereBody;	//‘Ì
 	CCollider mColSphereHead;	//“ª
-//	CCollider mColSphereSword;	//Œ•
 
 	CXEnemy();
 	/*

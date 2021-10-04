@@ -3,16 +3,22 @@
 #include "CScene.h"
 #include "CXPlayer.h"
 #include "CXEnemy.h"
+#include "CMap.h"
 
 /*
 ゲームのシーン
 */
 class CSceneGame : public CScene {
-public:
+private:
+
+	//マップのインスタンス
+	CMap mMap;
 	//キャラクタのインスタンス
 	CXPlayer mPlayer;
 	//敵のインスタンス
 	CXEnemy mEnemy;
+
+public:
 
 	~CSceneGame();
 	//初期化処理のオーバーライド

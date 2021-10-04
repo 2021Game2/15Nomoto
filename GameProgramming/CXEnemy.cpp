@@ -21,13 +21,6 @@ void CXEnemy::Init(CModelX* model)
 	mColSphereSword1.mpMatrix = &mpCombinedMatrix[26];
 	mColSphereSword2.mpMatrix = &mpCombinedMatrix[26];
 
-	/*
-	mColSphereBody.mpMatrix = &mpCombinedMatrix[8];
-	//“ª
-	mColSphereHead.mpMatrix = &mpCombinedMatrix[11];
-	//Œ•
-	mColSphereSword.mpMatrix = &mpCombinedMatrix[21];
-	*/
 }
 
 void CXEnemy::Collision(CCollider* m, CCollider* o)
