@@ -86,6 +86,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CBillBoard.cpp" />
+    <ClCompile Include="CBillboard2.cpp" />
     <ClCompile Include="CCamera.cpp" />
     <ClCompile Include="CCharacter.cpp" />
     <ClCompile Include="CCollider.cpp" />
@@ -94,6 +95,7 @@
     <ClCompile Include="CColliderTriangle.cpp" />
     <ClCompile Include="CCollisionManager.cpp" />
     <ClCompile Include="CEffect.cpp" />
+    <ClCompile Include="CInput.cpp" />
     <ClCompile Include="CKey.cpp" />
     <ClCompile Include="CMap.cpp" />
     <ClCompile Include="CMaterial.cpp" />
@@ -120,6 +122,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CBillBoard.h" />
+    <ClInclude Include="CBillboard2.h" />
     <ClInclude Include="CCamera.h" />
     <ClInclude Include="CCharacter.h" />
     <ClInclude Include="CCollider.h" />
@@ -128,6 +131,7 @@
     <ClInclude Include="CColliderTriangle.h" />
     <ClInclude Include="CCollisionManager.h" />
     <ClInclude Include="CEffect.h" />
+    <ClInclude Include="CInput.h" />
     <ClInclude Include="CKey.h" />
     <ClInclude Include="CMap.h" />
     <ClInclude Include="CMaterial.h" />

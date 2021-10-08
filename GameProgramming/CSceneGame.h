@@ -25,7 +25,8 @@ public:
 	void Init();
 	//更新処理のオーバーライド
 	void Update();
-
+	//描画処理のオーバーライド
+	void Render();
 };
 
 #endif

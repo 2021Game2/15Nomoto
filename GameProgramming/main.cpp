@@ -3,6 +3,7 @@
 #include "GLFW/glfw3.h"
 #include "main.h"
 #include "CSceneManager.h"
+#include "CInput.h"
 #include "glut.h"
 bool InitFlg = true;
 
@@ -26,6 +27,7 @@ void display() {
 	}
 	else {
 		SceneManager.Update();
+		SceneManager.Render();
 	}
 
 }
@@ -90,6 +92,8 @@ int main(void)
 	/* Make the window's context current */
 	glfwMakeContextCurrent(window);
 
+	//“ü—ÍƒNƒ‰ƒX‚Ì‰Šú‰»
+	CInput::Init(window);
 
 	glClearColor(0.7f, 0.7f, 0.7f, 1.0f);
 

@@ -1,5 +1,6 @@
 #include "CXPlayer.h"
 #include "CKey.h"
+#include "CCamera.h"
 
 CXPlayer::CXPlayer()
 	: mColSphereBody(this, nullptr, CVector(), 0.5f)
@@ -69,5 +70,6 @@ void CXPlayer::Update()
 			ChangeAnimation(0, true, 60);
 		}
 	}
+	Camera.SetTarget(mPosition);
 	CXCharacter::Update();
 }

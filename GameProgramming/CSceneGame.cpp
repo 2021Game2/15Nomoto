@@ -12,7 +12,7 @@
 //
 #include "CCollisionManager.h"
 
-CMatrix Matrix;
+//CMatrix Matrix;
 
 CSceneGame::~CSceneGame() {
 
@@ -46,10 +46,18 @@ void CSceneGame::Init() {
 	mEnemy.mPosition = CVector(7.0f, 0.0f, 0.0f);
 	mEnemy.ChangeAnimation(2, true, 200);
 
+
+	//カメラ初期化
+	Camera.Init();
 }
 
 
 void CSceneGame::Update() {
+
+	//Escapeで終了
+	if (CKey::Push(VK_ESCAPE)) {
+		exit(0);
+	}
 
 	//タスク更新
 	CTaskManager::Get()->Update();
@@ -57,29 +65,16 @@ void CSceneGame::Update() {
 	//衝突処理
 	CCollisionManager::Get()->Collision();
 
-	//カメラのパラメータを作成する
-	CVector e, c, u;//視点、注視点、上方向
-	//視点を求める
-	e = CVector(0.0f, 2.0f, -10.0f)*mPlayer.mMatrix;
-	//注視点を求める
-	c = mPlayer.mPosition;
-	//上方向を求める
-	u = CVector(0.0f, 1.0f, 0.0f)*mPlayer.mMatrixRotate;
+	Camera.Update();
 
+	return;
+}
+
+void CSceneGame::Render()
+{
 	//カメラクラスの設定
-	Camera.Set(e, c, u);
 	Camera.Render();
 
-	//Y軸＋回転
-	if (CKey::Push('M')) {
-		Matrix = Matrix * CMatrix().RotateY(1);
-	}
-	if (CKey::Push('N')) {
-		Matrix = Matrix * CMatrix().RotateY(-1);
-	}
-
-	//行列設定
-	glMultMatrixf(Matrix.mF);
 
 	//タスク描画
 	CTaskManager::Get()->Render();
@@ -95,6 +90,5 @@ void CSceneGame::Update() {
 	//2Dの描画終了
 	CUtil::End2D();
 
-	return;
 }
 
