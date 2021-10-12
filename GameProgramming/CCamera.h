@@ -15,7 +15,7 @@ public:
 	//上方向
 	CVector mUp;
 
-	CMatrix Matrix;
+	CMatrix mMatrix;
 
 	//重複するがカメラ制御用
 	CVector mPos;		//位置
@@ -39,6 +39,9 @@ public:
 
 	//カメラ適用
 	void Render();
+
+	//ベクトル取得
+	CMatrix GetMat();
 };
 
 //カメラの外部参照

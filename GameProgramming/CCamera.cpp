@@ -78,10 +78,10 @@ void CCamera::Update() {
 	//}
 
 	if (CKey::Push(VK_RIGHT)) {
-		mAngleX -= 0.1f;
+		mAngleX -= 0.05f;
 	}
 	if (CKey::Push(VK_LEFT)) {
-		mAngleX += 0.1f;
+		mAngleX += 0.05f;
 	}
 	if (CKey::Push(VK_UP)) {
 		mAngleY += 0.01f;
@@ -120,4 +120,14 @@ void CCamera::Render() {
 	gluLookAt(mEye.mX, mEye.mY, mEye.mZ,
 		mCenter.mX, mCenter.mY, mCenter.mZ,
 		mUp.mX, mUp.mY, mUp.mZ);
+
+	//ÉJÉÅÉâçsóÒäiî[
+	glGetFloatv(GL_MODELVIEW_MATRIX, mMatrix.mF);
 }
+
+CMatrix CCamera::GetMat() {
+	return mMatrix;
+
+}
+
+

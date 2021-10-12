@@ -49,6 +49,7 @@ CMatrix CMatrix::Scale(float sx, float sy, float sz)
 #define _USE_MATH_DEFINES
 //数学関数のインクルード
 #include <math.h>
+#include "CVector.h"
 
 //回転行列（Y軸）の作成
 //RotateY(角度)
@@ -228,3 +229,13 @@ CMatrix CMatrix::Inverse(void)
 
 	return tmp;
 };
+
+CVector CMatrix::GetXVec() {
+	return CVector(m00, m01, m02);
+}
+CVector CMatrix::GetYVec() {
+	return CVector(m10, m11, m12);
+}
+CVector CMatrix::GetZVec() {
+	return CVector(-m20, -m21, -m22);//奥行きの逆方向なのでマイナスにしておく
+}

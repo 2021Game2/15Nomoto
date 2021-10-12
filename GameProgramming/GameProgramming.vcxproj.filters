@@ -132,9 +132,6 @@
     <ClCompile Include="CVector.cpp">
       <Filter>ソース ファイル\Lib</Filter>
     </ClCompile>
-    <ClCompile Include="CCamera.cpp">
-      <Filter>ソース ファイル\Game\Player</Filter>
-    </ClCompile>
     <ClCompile Include="CInput.cpp">
       <Filter>ソース ファイル\Lib</Filter>
     </ClCompile>
@@ -142,6 +139,9 @@
       <Filter>ソース ファイル\Base</Filter>
     </ClCompile>
     <ClCompile Include="CBillboard2.cpp">
+      <Filter>ソース ファイル\Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="CCamera.cpp">
       <Filter>ソース ファイル\Lib</Filter>
     </ClCompile>
   </ItemGroup>

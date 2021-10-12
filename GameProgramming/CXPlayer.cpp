@@ -1,6 +1,9 @@
 #include "CXPlayer.h"
 #include "CKey.h"
 #include "CCamera.h"
+#include "CUtil.h"
+#define _USE_MATH_DEFINES
+#include <math.h>
 
 CXPlayer::CXPlayer()
 	: mColSphereBody(this, nullptr, CVector(), 0.5f)
@@ -22,6 +25,7 @@ void CXPlayer::Init(CModelX* model)
 	//Œ•
 	mColSphereSword.mpMatrix = &mpCombinedMatrix[22];
 
+	mRotation.mY = 0.01f;
 }
 
 void CXPlayer::Update()
@@ -42,34 +46,86 @@ void CXPlayer::Update()
 	}
 	else
 	{
+		//ƒJƒƒ‰Ž‹“_ˆÚ“®@’ÊÌ–³‘oˆÚ“®
+
+		//ƒJƒƒ‰‚Ì¶‰E‚Æ‘OŒã‚ÌƒxƒNƒgƒ‹‚ðŽæ“¾
+		CVector SideVec = Camera.GetMat().GetXVec();
+		CVector FrontVec = Camera.GetMat().GetZVec();
+		//‚‚³ˆÚ“®‚ÍƒJƒbƒg‚·‚é
+		SideVec.mY = 0.0f;
+		FrontVec.mY = 0.0f;
+		//³‹K‰»‚·‚é
+		SideVec.Normalize();
+		FrontVec.Normalize();
+
+		float speed = 0.15f;
+		CVector Move(0, 0, 0);
+
+
+		if (CKey::Push('A'))
+		{
+			//			mRotation.mY += 2.0f;
+			Move -= SideVec;
+		}
+		else if (CKey::Push('D'))
+		{
+			//			mRotation.mY -= 2.0f;
+			Move += SideVec;
+		}
+		if (CKey::Push('W'))
+		{
+			Move += FrontVec;
+			//			mPosition += CVector(0.0f, 0.0f, 0.1f) * mMatrixRotate;
+		}
+		else if (CKey::Push('S'))
+		{
+			Move -= FrontVec;
+			//			mPosition += CVector(0.0f, 0.0f, 0.1f) * mMatrixRotate;
+		}
+
 		if (CKey::Push(' '))
 		{
 			ChangeAnimation(3, true, 30);
 		}
-		else if (CKey::Push('W'))
-		{
+		else if (Move.Length() != 0.0f) {
 			ChangeAnimation(1, true, 60);
-			mPosition += CVector(0.0f, 0.0f, 0.1f) * mMatrixRotate;
-		}
-		else if (CKey::Push('A'))
-		{
-			ChangeAnimation(1, true, 60);
-			mPosition += CVector(0.0f, 0.0f, 0.1f) * mMatrixRotate;
-		}
-		else if (CKey::Push('S'))
-		{
-			ChangeAnimation(1, true, 60);
-			mPosition += CVector(0.0f, 0.0f, 0.1f) * mMatrixRotate;
-		}
-		else if (CKey::Push('D'))
-		{
-			ChangeAnimation(1, true, 60);
-			mPosition += CVector(0.0f, 0.0f, 0.1f) * mMatrixRotate;
 		}
 		else {
 			ChangeAnimation(0, true, 60);
 		}
+
+		//ˆÚ“®—Ê³‹K‰»@‚±‚ê‚ð‚µ‚È‚¢‚ÆŽÎ‚ßˆÚ“®‚ª‘‚­‚È‚Á‚Ä‚µ‚Ü‚¤‚Ì‚Å’ˆÓ
+		//ƒWƒƒƒ“ƒvŽž‚È‚Ç‚ÍYŽ²‚ð³‹K‰»‚µ‚È‚¢‚æ‚¤’ˆÓ
+		Move.Normalize();
+		//•½sˆÚ“®—Ê
+		Move = Move * speed;
+
+
+		//•’Ê‚É3ŽŸŒ³ƒxƒNƒgƒ‹ŒvŽZ‚ÅŽZo‚µ‚½‚Ù‚¤‚ª³Šm‚¾‚ªŒvŽZ—Ê‚ðŒœ”O‚·‚éê‡‚Í‹[Ž—ŒvŽZ‚ÅŒy—Ê‰»
+		//‹[Ž—ƒxƒNƒgƒ‹ŒvŽZ
+		Check tCheck = CUtil::GetCheck2D(Move.mX, Move.mZ, 0, 0, mRotation.mY * (M_PI / 180.0f));
+
+		//‰ñ“]‘¬“x@degree‚É’¼‚·
+		float turnspeed = (180.0f / M_PI) * 0.5f;
+
+		//‹}‚ÈU‚è•Ô‚è‚ð—}§
+		if (tCheck.turn > 1.5f) tCheck.turn = 1.5f;
+
+		//ˆÚ“®•ûŒü‚ÖƒLƒƒƒ‰‚ðŒü‚©‚¹‚é
+		if (tCheck.cross > 0.0f) {
+			mRotation.mY += tCheck.turn * turnspeed;
+		}
+		if (tCheck.cross < 0.0f) {
+			mRotation.mY -= tCheck.turn * turnspeed;
+		}
+
+		//À•WˆÚ“®
+		mPosition += Move;
+
+
 	}
+	//’Ž‹“_Ý’è
 	Camera.SetTarget(mPosition);
+
 	CXCharacter::Update();
 }
