@@ -6,6 +6,9 @@
 
 class CXPlayer : public CXCharacter
 {
+private:
+	int mHp;	//プレイヤーHP
+	bool mAttack;	//弱攻撃切り替え用判定フラグ false:右から振りかぶり true:左から振りかぶり
 public:
 	//コライダの宣言
 	CCollider mColSphereBody;	//体

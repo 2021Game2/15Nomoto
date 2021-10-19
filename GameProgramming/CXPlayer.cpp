@@ -5,14 +5,20 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
+#define INITIALIZE 0	//初期化
+#define PLAYERHP 100	//プレイヤーHP初期値
+
 CXPlayer::CXPlayer()
 	: mColSphereBody(this, nullptr, CVector(), 0.5f)
 	, mColSphereHead(this, nullptr, CVector(0.0f, 5.0f, -3.0f), 0.5f)
 	, mColSphereSword(this, nullptr, CVector(-10.0f, 10.0f, 50.0f), 0.3f)
+	, mHp(INITIALIZE)
+	, mAttack(false)
 {
 	//タグにプレイヤーを設定します
 	mTag = EPLAYER;
 	mColSphereSword.mTag = CCollider::ESWORD;
+	mHp = PLAYERHP;
 }
 
 void CXPlayer::Init(CModelX* model)
@@ -38,6 +44,36 @@ void CXPlayer::Update()
 		}
 	}
 	else if (mAnimationIndex == 4)
+	{
+		if (mAnimationFrame >= mAnimationFrameSize)
+		{
+			ChangeAnimation(0, true, 60);
+			mAttack = true;
+		}
+	}
+	else if (mAnimationIndex == 5)
+	{
+		if (mAnimationFrame >= mAnimationFrameSize)
+		{
+			ChangeAnimation(6, false, 30);
+		}
+	}
+	else if (mAnimationIndex == 6)
+	{
+		if (mAnimationFrame >= mAnimationFrameSize)
+		{
+			ChangeAnimation(0, true, 60);
+			mAttack = false;
+		}
+	}
+	else if (mAnimationIndex == 7)
+	{
+		if (mAnimationFrame >= mAnimationFrameSize)
+		{
+			ChangeAnimation(8, false, 30);
+		}
+	}
+	else if (mAnimationIndex == 8)
 	{
 		if (mAnimationFrame >= mAnimationFrameSize)
 		{
@@ -83,9 +119,15 @@ void CXPlayer::Update()
 			//			mPosition += CVector(0.0f, 0.0f, 0.1f) * mMatrixRotate;
 		}
 
-		if (CKey::Push(' '))
+		if (CKey::Push('J')&&mAttack==false)
 		{
 			ChangeAnimation(3, true, 30);
+		}
+		else if (CKey::Push('J') && mAttack == true) {
+			ChangeAnimation(5, true, 30);
+		}
+		else if (CKey::Push('K')) {
+			ChangeAnimation(7, true, 30);
 		}
 		else if (Move.Length() != 0.0f) {
 			ChangeAnimation(1, true, 60);
