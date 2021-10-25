@@ -1,4 +1,5 @@
 #include "CXEnemy.h"
+#include "CXPlayer.h"
 
 CXEnemy::CXEnemy()
 	: mColSphereBody(this, nullptr, CVector(0.5f, -1.0f, 0.0f), 1.0f)
@@ -7,6 +8,9 @@ CXEnemy::CXEnemy()
 	, mColSphereSword1(this, nullptr, CVector(0.5f, 2.5f, -0.2f), 0.5f)
 	, mColSphereSword2(this, nullptr, CVector(0.3f, 1.5f, -0.2f), 0.5f)
 {
+	mTag = EENEMY;
+	mColSphereSword0.mTag = mColSphereSword1.mTag =
+		mColSphereSword2.mTag = CCollider::EENEMYSWORD;
 }
 
 void CXEnemy::Init(CModelX* model)
@@ -31,12 +35,22 @@ void CXEnemy::Collision(CCollider* m, CCollider* o)
 		{
 			if (o->mpParent->mTag == EPLAYER)
 			{
-				if (o->mTag == CCollider::ESWORD)
+				if (o->mTag == CCollider::EPLAYERSWORD)
 				{
-					if (CCollider::Collision(m, o))
+					if (CXPlayer::spThis->mIn_Light_Attack == true)
 					{
-						//30フレームかけてダウンし、繰り返さない
-						ChangeAnimation(11, false, 30);
+						if (CCollider::Collision(m, o))
+						{
+							//30フレームかけてダウンし、繰り返さない
+							ChangeAnimation(11, false, 30);
+						}
+					}
+					else if (CXPlayer::spThis->mIn_Strong_Attack == true)
+					{
+						if (CCollider::Collision(m, o))
+						{
+							ChangeAnimation(11, false, 30);
+						}
 					}
 				}
 			}

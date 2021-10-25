@@ -11,13 +11,19 @@ public:
 	CTriangle mT[2];
 	//マテリアル
 	CMaterial mMaterial;
+	//拡縮
+	float mBillBoardScale;
+	//UV
+	CVector mUv[4];
+	//法線
+	CVector mN[4];
 	//コンストラクタ
 	CBillBoard();
-	//CBillBoard(位置, 幅, 高さ)
-	CBillBoard(CVector pos, float w, float h);
+	//CBillBoard(位置, スケール, 回転)
+	CBillBoard(CVector pos, float scale, float rotate);
 	//位置と大きさの設定
-	//Set(位置, 幅, 高さ)
-	void Set(CVector pos, float w, float h);
+	//Set(位置, スケール, 回転)
+	void Set(CVector pos, float scale, float rotate);
 	//更新
 	void Update();
 	//描画

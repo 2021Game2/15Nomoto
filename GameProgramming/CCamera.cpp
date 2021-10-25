@@ -77,16 +77,16 @@ void CCamera::Update() {
 	//	Matrix = Matrix * CMatrix().RotateY(-1);
 	//}
 
-	if (CKey::Push(VK_RIGHT)) {
+	if (CKey::Push('M')) {
 		mAngleX -= 0.05f;
 	}
-	if (CKey::Push(VK_LEFT)) {
+	if (CKey::Push('B')) {
 		mAngleX += 0.05f;
 	}
-	if (CKey::Push(VK_UP)) {
+	if (CKey::Push('H')) {
 		mAngleY += 0.01f;
 	}
-	if (CKey::Push(VK_DOWN)) {
+	if (CKey::Push('N')) {
 		mAngleY -= 0.01f;
 	}
 

@@ -2,8 +2,8 @@
 
 CMaterial CEffect::sMaterial; //マテリアル.テクスチャ
 
-CEffect::CEffect(const CVector &pos, float w, float h, char *texture, int row, int col, int fps)
-: CBillBoard(pos, w, h), mRows(row), mCols(col), mFps(fps), mFrame(0)
+CEffect::CEffect(const CVector& pos, float Scale, float Rotate, char* texture, int row, int col, int fps)
+	: CBillBoard(pos, Scale, Rotate), mRows(row), mCols(col), mFps(fps), mFrame(0)
 {
 	//テクスチャを読んでない場合は読む
 	if (sMaterial.mTexture.mId == 0)
@@ -14,10 +14,18 @@ CEffect::CEffect(const CVector &pos, float w, float h, char *texture, int row, i
 	}
 }
 
+CEffect::~CEffect()
+{
+}
+
+void CEffect::MoveUpdate() {
+
+}
+
 void CEffect::Update() {
 	//コマ数の計算
 	int frame = mFrame++ / mFps;
-	if (frame == mRows*mCols)
+	if (frame >= mRows*mCols)
 	{
 		mEnabled = false;
 		return;
@@ -38,6 +46,12 @@ void CEffect::Update() {
 	mT[1].mUv[0] = CVector(left, top, 0.0f);
 	mT[1].mUv[1] = CVector(left, bot, 0.0f);
 	mT[1].mUv[2] = CVector(righ, top, 0.0f);
+
+	mUv[0] = CVector(left, top, 0.0f);
+	mUv[1] = CVector(left, bot, 0.0f);
+	mUv[2] = CVector(righ, top, 0.0f);
+	mUv[3] = CVector(righ, bot, 0.0f);
+
 	//ビルボード更新
 	CBillBoard::Update();
 }

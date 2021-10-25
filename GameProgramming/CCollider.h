@@ -14,7 +14,8 @@ public:
 	{
 		EBODY,		//本体
 		ESEARCH,	//サーチ用
-		ESWORD,	//剣
+		EPLAYERSWORD,	//プレイヤー剣
+		EENEMYSWORD,	//敵剣
 	};
 	ETag mTag;
 	//コライダタイプ

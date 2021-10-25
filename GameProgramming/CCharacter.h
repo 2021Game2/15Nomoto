@@ -31,6 +31,7 @@ public:
 	~CCharacter();
 	//コンストラクタ
 	CCharacter();
+	CCharacter(int Priority);
 	//衝突処理
 	virtual void Collision(CCollider *m, CCollider *o) {}
 
