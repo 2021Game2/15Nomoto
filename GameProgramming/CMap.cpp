@@ -1,7 +1,10 @@
 #include "CMap.h"
+#include "CColliderMesh.h"
 
 #define OBJ "sky.obj"
 #define MTL "sky.mtl"
+
+CColliderMesh mColliderMesh;
 
 CMap::CMap()
 {
@@ -11,4 +14,6 @@ CMap::CMap()
 
 	mModel.Load(OBJ, MTL);	//ƒ‚ƒfƒ‹‚Ì“Ç‚İ‚İ
 	mpModel = &mModel;
+
+	mColliderMesh.Set(NULL, NULL, &mModel);
 }

@@ -12,11 +12,15 @@ private:
 	bool mIn_Defense;		//防御判定フラグ false:防御していない true:防御中
 	bool mIn_Dodge;			//回避判定フラグ false:回避していない treu:回避中
 	int mDodge_Time;		//回避判定時間
+	float mJump;			//ジャンプ初速
+	bool mJump_Flag;		//ジャンプ判定フラグ false:着地している true:ジャンプ中
+
 public:
 	//コライダの宣言
 	CCollider mColSphereBody;	//体
 	CCollider mColSphereHead;	//頭
 	CCollider mColSphereSword;	//剣
+	CCollider mColSphereFoot;	//足
 
 	CXPlayer();
 

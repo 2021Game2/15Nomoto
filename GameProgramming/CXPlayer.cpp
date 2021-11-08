@@ -10,6 +10,8 @@
 #define INITIALIZE 0	//初期化
 #define PLAYERHP 100	//プレイヤーHP初期値
 #define DODGETIME 30	//回避時間
+#define GRAVITY 0.2	//重力加速度
+#define JUMP_SPEED 5	//ジャンプ初速
 
 CXPlayer *CXPlayer::spThis = 0;
 
@@ -17,6 +19,7 @@ CXPlayer::CXPlayer()
 	: mColSphereBody(this, nullptr, CVector(), 0.5f)
 	, mColSphereHead(this, nullptr, CVector(0.0f, 5.0f, -3.0f), 0.5f)
 	, mColSphereSword(this, nullptr, CVector(-10.0f, 10.0f, 50.0f), 0.3f)
+	, mColSphereFoot(this, nullptr, CVector(0.0f,0.0f,0.0f), 0.8f)
 	, mHp(INITIALIZE)
 	, mAttack_switch(false)
 	, mIn_Light_Attack(false)
@@ -24,6 +27,8 @@ CXPlayer::CXPlayer()
 	, mIn_Defense(false)
 	, mIn_Dodge(false)
 	, mDodge_Time(INITIALIZE)
+	, mJump(INITIALIZE)
+	, mJump_Flag(false)
 {
 	//タグにプレイヤーを設定します
 	mTag = EPLAYER;
@@ -41,6 +46,8 @@ void CXPlayer::Init(CModelX* model)
 	mColSphereHead.mpMatrix = &mpCombinedMatrix[12];
 	//剣
 	mColSphereSword.mpMatrix = &mpCombinedMatrix[22];
+	//足
+	mColSphereFoot.mpMatrix = &mpCombinedMatrix[0];
 
 	mRotation.mY = 0.01f;
 }
@@ -52,7 +59,7 @@ void CXPlayer::Update()
 		{
 			if (mAnimationFrame >= mAnimationFrameSize)
 			{
-				ChangeAnimation(4, false, 30);
+				ChangeAnimation(4, false, 20);
 			}
 		}
 		else if (mAnimationIndex == 4)
@@ -68,7 +75,7 @@ void CXPlayer::Update()
 		{
 			if (mAnimationFrame >= mAnimationFrameSize)
 			{
-				ChangeAnimation(6, false, 30);
+				ChangeAnimation(6, false, 20);
 			}
 		}
 		else if (mAnimationIndex == 6)
@@ -102,12 +109,15 @@ void CXPlayer::Update()
 			//カメラの左右と前後のベクトルを取得
 			CVector SideVec = Camera.GetMat().GetXVec();
 			CVector FrontVec = Camera.GetMat().GetZVec();
+
+			CVector Vertical;
 			//高さ移動はカットする
 			SideVec.mY = 0.0f;
 			FrontVec.mY = 0.0f;
 			//正規化する
 			SideVec.Normalize();
 			FrontVec.Normalize();
+			Vertical.Normalize();
 
 			float speed = 0.15f;
 			CVector Move(0, 0, 0);
@@ -164,11 +174,11 @@ void CXPlayer::Update()
 
 			if (CKey::Push('J') && mAttack_switch == false)
 			{
-				ChangeAnimation(3, true, 30);
+				ChangeAnimation(3, true, 20);
 				mIn_Light_Attack = true;
 			}
 			else if (CKey::Push('J') && mAttack_switch == true) {
-				ChangeAnimation(5, true, 30);
+				ChangeAnimation(5, true, 20);
 				mIn_Light_Attack = true;
 			}
 			else if (CKey::Push('K')) {
@@ -183,6 +193,18 @@ void CXPlayer::Update()
 			{
 				ChangeAnimation(0, true, 60);
 			}
+
+			if (CKey::Once(' ')&&mJump_Flag==false)
+			{
+				mJump = JUMP_SPEED;
+				mJump_Flag = true;
+			}
+
+			mJump -= GRAVITY;
+
+			Vertical.mY += mJump;
+
+			Move += Vertical;
 
 			//移動量正規化　これをしないと斜め移動が早くなってしまうので注意
 			//ジャンプ時などはY軸を正規化しないよう注意
@@ -216,7 +238,8 @@ void CXPlayer::Update()
 			{
 				mIn_Defense = true;
 			}
-			else {
+			else 
+			{
 				mIn_Defense = false;
 			}
 
@@ -258,7 +281,7 @@ void CXPlayer::Collision(CCollider* m, CCollider* o)
 						{
 							if (mIn_Dodge == false)
 							{
-								mHp -= 100;
+								mHp -= 5;
 								if (mHp <= 0) {
 									ChangeAnimation(11, false, 30);
 								}
@@ -272,6 +295,17 @@ void CXPlayer::Collision(CCollider* m, CCollider* o)
 						}
 					}
 				}
+			}
+		}
+		if (o->mType == CCollider::ETRIANGLE)
+		{
+			CVector adjust;
+			if (CCollider::CollisionTriangleSphere(o, m, &adjust))
+			{
+				//衝突していない位置まで戻す
+				mPosition = mPosition + adjust;
+				mJump = 0;
+				mJump_Flag = false;
 			}
 		}
 	}
