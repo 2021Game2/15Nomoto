@@ -310,7 +310,7 @@ void CXPlayer::Collision(CCollider* m, CCollider* o)
 						{
 							if (mIn_Dodge == false)
 							{
-								mHp -= 5;
+								mHp -= 1;
 								if (mHp <= 0) {
 									ChangeAnimation(11, false, 30);
 								}
