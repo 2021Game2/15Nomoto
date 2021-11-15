@@ -16,6 +16,7 @@ public:
 	CVector mUp;
 
 	CMatrix mMatrix;
+	CMatrix mProj;
 
 	//重複するがカメラ制御用
 	CVector mPos;		//位置
@@ -42,6 +43,14 @@ public:
 
 	//ベクトル取得
 	CMatrix GetMat();
+	//プロジェクションマトリクス取得
+	CMatrix GetProjMat();
+
+	//スクリーン座標変換
+	//戻り値 表示範囲
+	//pOut 結果格納用
+	//pos 2Dに変換したいワールド座標
+	bool WorldToScreen(CVector* pOut, const CVector& pos);
 };
 
 //カメラの外部参照

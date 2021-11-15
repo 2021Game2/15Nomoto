@@ -22,6 +22,7 @@ public:
 	void Init(CModelX* model);
 	//アニメーションの変更
 	void ChangeAnimation(int index, bool loop, float framesize);
+	bool IsAnimationEnd();
 	//更新処理
 	void Update(CMatrix& m);
 	void Update();

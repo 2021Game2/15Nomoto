@@ -1,8 +1,9 @@
 #ifndef CSCENEGAME_H
 #define CSCENEGAME_H
 #include "CScene.h"
-#include "CXPlayer.h"
-#include "CXEnemy.h"
+#include "CBillBoard.h"
+#include "CBillBoard2.h"
+#include "CSound.h"
 #include "CMap.h"
 
 /*
@@ -13,10 +14,6 @@ private:
 
 	//マップのインスタンス
 	CMap mMap;
-	//キャラクタのインスタンス
-	CXPlayer mPlayer;
-	//敵のインスタンス
-	CXEnemy mEnemy;
 
 public:
 

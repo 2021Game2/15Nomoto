@@ -21,24 +21,27 @@ public:
 	CVector operator*(const CMatrix &m);
 	//-演算子のオーバーロード
 	//CVector - CVector の演算結果を返す
-	CVector operator-(const CVector &v);
+	CVector operator-(const CVector &v) const;
 	//ベクトルの長さを返す
 	float Length();
+	//ベクトルの長さを返す（平方根なし）
+	float LengthSq() const;
 	//内積
 	//Dot(ベクトル)
-	float Dot(const CVector &v);
+	float Dot(const CVector &v) const;
 	//外積
 	//Cross(ベクトル)
 	CVector Cross(const CVector &v);
 	//*演算子のオーバーロード
 	//CVector * float の演算結果を返す
-	CVector operator*(const float &f);
+	CVector operator*(const float& f) const;
+	CVector operator/(const float& f);
 	//正規化
 	//大きさ1のベクトルを返す
 	CVector Normalize();
 	//+演算しのオーバーロード
 	//CVector + CVector の演算結果を返す
-	CVector operator+(const CVector &v);
+	CVector operator+(const CVector &v)const;
 	//+=演算子のオーバーロード
 	//CVector1 += CVector2 の演算を行う
 	void operator+=(const CVector& v);

@@ -13,7 +13,7 @@
 #define GRAVITY 0.2	//重力加速度
 #define JUMP_SPEED 5	//ジャンプ初速
 
-CXPlayer *CXPlayer::spThis = 0;
+CXPlayer *CXPlayer::spInstance = 0;
 
 CXPlayer::CXPlayer()
 	: mColSphereBody(this, nullptr, CVector(), 0.5f)
@@ -29,12 +29,16 @@ CXPlayer::CXPlayer()
 	, mDodge_Time(INITIALIZE)
 	, mJump(INITIALIZE)
 	, mJump_Flag(false)
+	, m_pos(0.0f, 0.0f, 0.0f)
+	, m_rot(0.0f, 0.0f, 0.0f)
+	, m_vec(0.0f, 0.0f, 0.0f)
+	, m_rad(0.5f)
 {
 	//タグにプレイヤーを設定します
 	mTag = EPLAYER;
-	mColSphereSword.mTag = CCollider::EPLAYERSWORD;
+	mColSphereSword.mTag = CCollider::ESWORD;
 	mHp = PLAYERHP;
-	spThis = this;
+	spInstance = this;
 }
 
 void CXPlayer::Init(CModelX* model)
@@ -50,6 +54,31 @@ void CXPlayer::Init(CModelX* model)
 	mColSphereFoot.mpMatrix = &mpCombinedMatrix[0];
 
 	mRotation.mY = 0.01f;
+}
+
+void CXPlayer::Generate() 
+{
+	spInstance = new CXPlayer;
+}
+
+void CXPlayer::Release()
+{
+	if (spInstance) {
+		delete spInstance;
+		spInstance = NULL;
+	}
+}
+
+CXPlayer* CXPlayer::GetInstance() 
+{
+	return spInstance;
+}
+CVector CXPlayer::GetPos() {
+	return m_pos;
+}
+CVector CXPlayer::GetRot()
+{
+	return m_rot;
 }
 
 void CXPlayer::Update()
@@ -273,7 +302,7 @@ void CXPlayer::Collision(CCollider* m, CCollider* o)
 		{
 			if (o->mpParent->mTag == EENEMY)
 			{
-				if (o->mTag == CCollider::EENEMYSWORD)
+				if (o->mTag == CCollider::ESWORD)
 				{
 					if (CCollider::Collision(m, o))
 					{

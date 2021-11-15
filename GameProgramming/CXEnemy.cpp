@@ -1,5 +1,5 @@
 #include "CXEnemy.h"
-#include "CXPlayer.h"
+//#include "CXPlayer.h"
 
 CXEnemy::CXEnemy()
 	: mColSphereBody(this, nullptr, CVector(0.5f, -1.0f, 0.0f), 1.0f)
@@ -10,7 +10,7 @@ CXEnemy::CXEnemy()
 {
 	mTag = EENEMY;
 	mColSphereSword0.mTag = mColSphereSword1.mTag =
-		mColSphereSword2.mTag = CCollider::EENEMYSWORD;
+		mColSphereSword2.mTag = CCollider::ESWORD;
 }
 
 void CXEnemy::Init(CModelX* model)
@@ -29,31 +29,31 @@ void CXEnemy::Init(CModelX* model)
 
 void CXEnemy::Collision(CCollider* m, CCollider* o)
 {
-	if (m->mType == CCollider::ESPHERE)
-	{
-		if (o->mType == CCollider::ESPHERE)
-		{
-			if (o->mpParent->mTag == EPLAYER)
-			{
-				if (o->mTag == CCollider::EPLAYERSWORD)
-				{
-					if (CXPlayer::spThis->mIn_Light_Attack == true)
-					{
-						if (CCollider::Collision(m, o))
-						{
-							//30フレームかけてダウンし、繰り返さない
-							ChangeAnimation(11, false, 30);
-						}
-					}
-					else if (CXPlayer::spThis->mIn_Strong_Attack == true)
-					{
-						if (CCollider::Collision(m, o))
-						{
-							ChangeAnimation(11, false, 30);
-						}
-					}
-				}
-			}
-		}
-	}
+	//if (m->mType == CCollider::ESPHERE)
+	//{
+	//	if (o->mType == CCollider::ESPHERE)
+	//	{
+	//		if (o->mpParent->mTag == EPLAYER)
+	//		{
+	//			if (o->mTag == CCollider::ESWORD)
+	//			{
+	//				if (CXPlayer::spThis->mIn_Light_Attack == true)
+	//				{
+	//					if (CCollider::Collision(m, o))
+	//					{
+	//						//30フレームかけてダウンし、繰り返さない
+	//						ChangeAnimation(11, false, 30);
+	//					}
+	//				}
+	//				else if (CXPlayer::spThis->mIn_Strong_Attack == true)
+	//				{
+	//					if (CCollider::Collision(m, o))
+	//					{
+	//						ChangeAnimation(11, false, 30);
+	//					}
+	//				}
+	//			}
+	//		}
+	//	}
+	//}
 }

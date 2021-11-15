@@ -21,6 +21,7 @@ public:
 	virtual void Update() {}
 	//•`‰æ
 	virtual void Render() {}
+	virtual void Render2D() {}
 	//Õ“Ëˆ—
 	virtual void TaskCollision() {}
 };

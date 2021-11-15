@@ -14,6 +14,14 @@ private:
 	int mDodge_Time;		//回避判定時間
 	float mJump;			//ジャンプ初速
 	bool mJump_Flag;		//ジャンプ判定フラグ false:着地している true:ジャンプ中
+	//座標
+	CVector m_pos;
+	//回転
+	CVector m_rot;
+	//移動ベクトル
+	CVector m_vec;
+	//半径
+	float m_rad;
 
 public:
 	//コライダの宣言
@@ -34,9 +42,16 @@ public:
 	//m:自分のコライダ o:相手のコライダ
 	void Collision(CCollider* m, CCollider* o);
 
-	static CXPlayer *spThis;		//プレイヤーのインスタンス 外部参照用
+	static CXPlayer *spInstance;		//プレイヤーのインスタンス 外部参照用
 	bool mIn_Light_Attack;	//弱攻撃判定フラグ false:攻撃していない true:攻撃中
 	bool mIn_Strong_Attack;	//強攻撃判定フラグ false:攻撃していない true:攻撃中
+
+	static void Generate();			//生成
+	static void Release();			//解放
+	CVector GetPos();				//位置取得
+	CVector GetRot();				//角度取得（mY、ラジアン）
+
+	static CXPlayer* GetInstance();
 };
 
 #endif

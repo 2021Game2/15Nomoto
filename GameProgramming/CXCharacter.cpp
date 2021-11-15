@@ -49,6 +49,10 @@ void CXCharacter::ChangeAnimation(int index, bool loop, float framesize) {
 	//アニメーションの重みを1.0（100%)にする
 	mpModel->mAnimationSet[mAnimationIndex]->mWeight = 1.0f;
 }
+bool CXCharacter::IsAnimationEnd()
+{
+	return (mAnimationFrame >= mAnimationFrameSize);
+}
 /*
  Update
  更新する

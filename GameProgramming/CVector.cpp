@@ -33,7 +33,7 @@ CVector CVector::operator*(const CMatrix &m)
 
 //-演算しのオーバーロード
 //CVector - CVector の演算結果を返す
-CVector CVector::operator-(const CVector &v) {
+CVector CVector::operator-(const CVector &v) const{
 	return CVector(mX - v.mX, mY - v.mY, mZ - v.mZ);
 }
 
@@ -41,8 +41,12 @@ CVector CVector::operator-(const CVector &v) {
 float CVector::Length() {
 	return sqrtf(mX * mX + mY * mY + mZ * mZ);
 }
+float CVector::LengthSq() const
+{
+	return (mX * mX + mY * mY + mZ * mZ);
+}
 //内積
-float CVector::Dot(const CVector &v) {
+float CVector::Dot(const CVector &v) const {
 	return mX*v.mX + mY*v.mY + mZ * v.mZ;
 }
 
@@ -56,12 +60,17 @@ CVector CVector::Cross(const CVector &v) {
 }
 //*演算子のオーバーロード
 //CVector * float の演算結果を返す
-CVector CVector::operator*(const float &f) {
+CVector CVector::operator*(const float &f) const{
 	return CVector(mX * f, mY * f, mZ * f);
+}
+CVector CVector::operator/(const float& f) {
+	float div = 1.0f / f;
+	//	return CVector(mX / f, mY / f, mZ / f);
+	return operator*(div);
 }
 //+演算しのオーバーロード
 //CVector + CVector の演算結果を返す
-CVector CVector::operator+(const CVector &v)
+CVector CVector::operator+(const CVector &v) const
 {
 	return CVector(mX + v.mX, mY + v.mY, mZ + v.mZ);
 }
