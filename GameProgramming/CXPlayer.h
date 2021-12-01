@@ -3,6 +3,7 @@
 
 #include "CXCharacter.h"
 #include "CCollider.h"
+#include "CTaskManager.h"
 
 class CXPlayer : public CXCharacter
 {
@@ -22,6 +23,45 @@ private:
 	CVector m_vec;
 	//半径
 	float m_rad;
+
+	enum PlayerState {
+		State_Idle = 0,
+		State_Walk,
+		State_Dodge,
+		State_Jump,
+		State_Light_Attack,
+		State_Strong_Attack,
+		State_Hit,
+		State_Blow,
+		State_Death,
+	};
+
+	enum Anim {
+		Anim_None = 0,
+		Anim_TPose,
+		Anim_Walk,
+		Anim_Walk_Backwards,
+		Anim_Run,
+		Anim_Strafe_left,
+		Anim_Strafe_right,
+		Anim_Jump,
+		Anim_Attack1,
+		Anim_Attack2,
+		Anim_Attack3,
+		Anim_Attack4,
+		Anim_Attack5,
+		Anim_Attack6,
+		Anim_Hit1,
+		Anim_Hit2,
+		Anim_Hit3,
+		Anim_Death1,
+		Anim_Death2,
+		Anim_Idle1,
+		Anim_Idle2,
+		Anim_Emotion1,
+		Anim_Emotion2,
+		Anim_End
+	};
 
 public:
 	//コライダの宣言
@@ -52,6 +92,10 @@ public:
 	CVector GetRot();				//角度取得（mY、ラジアン）
 
 	static CXPlayer* GetInstance();
+
+	void TaskCollision();
+
+	void ChangeState(PlayerState hState);
 };
 
 #endif

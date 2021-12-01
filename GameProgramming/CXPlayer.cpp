@@ -6,6 +6,8 @@
 #include <math.h>
 #include "CEffect.h"
 #include "CXEnemy.h"
+#include "CCollisionManager.h"
+#include "CRes.h"
 
 #define INITIALIZE 0	//初期化
 #define PLAYERHP 100	//プレイヤーHP初期値
@@ -39,6 +41,30 @@ CXPlayer::CXPlayer()
 	mColSphereSword.mTag = CCollider::ESWORD;
 	mHp = PLAYERHP;
 	spInstance = this;
+
+	CRes::sModelX.SeparateAnimationSet(0, 0, 5, "Tpose");
+	CRes::sModelX.SeparateAnimationSet(0, 10, 80, "walk");
+	CRes::sModelX.SeparateAnimationSet(0, 90, 160, "walk_backwards");
+	CRes::sModelX.SeparateAnimationSet(0, 170, 220, "run");
+	CRes::sModelX.SeparateAnimationSet(0, 230, 300, "strafe_left");
+	CRes::sModelX.SeparateAnimationSet(0, 300, 370, "strafe_right");
+	CRes::sModelX.SeparateAnimationSet(0, 380, 430, "jump");
+	CRes::sModelX.SeparateAnimationSet(0, 440, 520, "attack_1");
+	CRes::sModelX.SeparateAnimationSet(0, 520, 615, "attack_2");
+	CRes::sModelX.SeparateAnimationSet(0, 615, 795, "attack_3");
+	CRes::sModelX.SeparateAnimationSet(0, 795, 850, "attack_4");
+	CRes::sModelX.SeparateAnimationSet(0, 850, 970, "attack_5");
+	CRes::sModelX.SeparateAnimationSet(0, 970, 1040, "attack_6");
+	CRes::sModelX.SeparateAnimationSet(0, 1040, 1080, "hit_1");
+	CRes::sModelX.SeparateAnimationSet(0, 1080, 1120, "hit_2");
+	CRes::sModelX.SeparateAnimationSet(0, 1120, 1160, "hit_3");
+	CRes::sModelX.SeparateAnimationSet(0, 1160, 1260, "death_1");
+	CRes::sModelX.SeparateAnimationSet(0, 1270, 1370, "death_2");
+	CRes::sModelX.SeparateAnimationSet(0, 1380, 1530, "idle_1");
+	CRes::sModelX.SeparateAnimationSet(0, 1530, 1830, "Idle_2");
+	CRes::sModelX.SeparateAnimationSet(0, 1830, 1930, "emotion_1");
+	CRes::sModelX.SeparateAnimationSet(0, 1930, 2040, "emotion_2");
+
 }
 
 void CXPlayer::Init(CModelX* model)
@@ -74,11 +100,11 @@ CXPlayer* CXPlayer::GetInstance()
 	return spInstance;
 }
 CVector CXPlayer::GetPos() {
-	return m_pos;
+	return mPosition;
 }
 CVector CXPlayer::GetRot()
 {
-	return m_rot;
+	return mRotation;
 }
 
 void CXPlayer::Update()
@@ -203,30 +229,31 @@ void CXPlayer::Update()
 
 			if (CKey::Push('J') && mAttack_switch == false)
 			{
-				ChangeAnimation(3, true, 20);
+				ChangeState(State_Light_Attack);
 				mIn_Light_Attack = true;
 			}
 			else if (CKey::Push('J') && mAttack_switch == true) {
-				ChangeAnimation(5, true, 20);
+				ChangeState(State_Light_Attack);
 				mIn_Light_Attack = true;
 			}
 			else if (CKey::Push('K')) {
-				ChangeAnimation(7, true, 30);
+				ChangeState(State_Strong_Attack);
 				mIn_Strong_Attack = true;
 			}
 			else if (Move.Length() != 0.0f)
 			{
-				ChangeAnimation(1, true, 60);
+				ChangeState(State_Walk);
 			}
 			else
 			{
-				ChangeAnimation(0, true, 60);
+				ChangeState(State_Idle);
 			}
 
 			if (CKey::Once(' ')&&mJump_Flag==false)
 			{
 				mJump = JUMP_SPEED;
 				mJump_Flag = true;
+				ChangeState(State_Jump);
 			}
 
 			mJump -= GRAVITY;
@@ -272,9 +299,10 @@ void CXPlayer::Update()
 				mIn_Defense = false;
 			}
 
-			if (CKey::Push('L'))
+			if (CKey::Once('L'))
 			{
 				mDodge_Time = DODGETIME;
+				ChangeState(State_Dodge);
 			}
 			if (mDodge_Time > 0)
 			{
@@ -287,6 +315,9 @@ void CXPlayer::Update()
 			}
 		}
 	}
+	////モデルの座標を設定
+	//mPosition = m_pos;
+	//mRotation = m_rot * (180.0f / M_PI);
 	//注視点設定
 	Camera.SetTarget(mPosition);
 
@@ -304,7 +335,7 @@ void CXPlayer::Collision(CCollider* m, CCollider* o)
 			{
 				if (o->mTag == CCollider::ESWORD)
 				{
-					if (CCollider::Collision(m, o))
+					/*if (CCollider::Collision(m, o))
 					{
 						if (mIn_Defense == false) 
 						{
@@ -322,7 +353,7 @@ void CXPlayer::Collision(CCollider* m, CCollider* o)
 								}
 							}
 						}
-					}
+					}*/
 				}
 			}
 		}
@@ -337,5 +368,49 @@ void CXPlayer::Collision(CCollider* m, CCollider* o)
 				mJump_Flag = false;
 			}
 		}
+	}
+}
+
+void CXPlayer::TaskCollision()
+{
+	mColSphereBody.ChangePriority();
+	mColSphereFoot.ChangePriority();
+	mColSphereHead.ChangePriority();
+	mColSphereSword.ChangePriority();
+
+	CCollisionManager::Get()->Collision(&mColSphereBody, COLLISIONRANGE);
+	CCollisionManager::Get()->Collision(&mColSphereFoot, COLLISIONRANGE);
+	CCollisionManager::Get()->Collision(&mColSphereHead, COLLISIONRANGE);
+	CCollisionManager::Get()->Collision(&mColSphereSword, COLLISIONRANGE);
+}
+
+void CXPlayer::ChangeState(PlayerState hState) {
+	switch (hState)
+	{
+	case CXPlayer::State_Idle:
+		ChangeAnimation(Anim_Idle1, true, 300);
+		break;
+	case CXPlayer::State_Walk:
+		ChangeAnimation(Anim_Walk, true, 50);
+		break;
+	case CXPlayer::State_Dodge:
+		ChangeAnimation(Anim_Attack4, false, 70);
+		break;
+	case CXPlayer::State_Jump:
+		ChangeAnimation(Anim_Jump, false, 50);
+		break;
+	case CXPlayer::State_Light_Attack:
+		ChangeAnimation(Anim_Attack1, false, 50);
+		break;
+	case CXPlayer::State_Strong_Attack:
+		ChangeAnimation(Anim_Attack4, false, 80);
+		break;
+	case CXPlayer::State_Hit:
+		ChangeAnimation(Anim_Hit1, false, 80);
+		break;
+	case CXPlayer::State_Blow:
+		break;
+	case CXPlayer::State_Death:
+		break;
 	}
 }

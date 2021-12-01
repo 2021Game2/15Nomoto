@@ -45,7 +45,6 @@ ClEnemyManager::~ClEnemyManager() {
 	}
 }
 
-
 void ClEnemyManager::Generate()
 {
 	m_Instance = new ClEnemyManager;
@@ -62,7 +61,6 @@ ClEnemyManager* ClEnemyManager::GetInstance()
 {
 	return m_Instance;
 }
-
 
 void ClEnemyManager::EnemyGenerate(int num)
 {
