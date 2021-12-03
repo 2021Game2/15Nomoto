@@ -69,6 +69,7 @@ CXPlayer::CXPlayer()
 
 void CXPlayer::Init(CModelX* model)
 {
+	model->mFrame[0]->mTransformMatrix = model->mFrame[0]->mTransformMatrix * CMatrix().RotateY(180);
 	CXCharacter::Init(model);
 	//‡¬s—ñ‚ÌÝ’è
 	mColSphereBody.mpMatrix = &mpCombinedMatrix[9];
@@ -244,6 +245,12 @@ void CXPlayer::Update()
 			{
 				ChangeState(State_Walk);
 			}
+			else if (mJump_Flag == true) {
+				ChangeState(State_Jump);
+			}
+			else if (mDodge_Time > 0) {
+				ChangeState(State_Dodge);
+			}
 			else
 			{
 				ChangeState(State_Idle);
@@ -253,7 +260,6 @@ void CXPlayer::Update()
 			{
 				mJump = JUMP_SPEED;
 				mJump_Flag = true;
-				ChangeState(State_Jump);
 			}
 
 			mJump -= GRAVITY;
@@ -302,7 +308,6 @@ void CXPlayer::Update()
 			if (CKey::Once('L'))
 			{
 				mDodge_Time = DODGETIME;
-				ChangeState(State_Dodge);
 			}
 			if (mDodge_Time > 0)
 			{
@@ -394,7 +399,7 @@ void CXPlayer::ChangeState(PlayerState hState) {
 		ChangeAnimation(Anim_Walk, true, 50);
 		break;
 	case CXPlayer::State_Dodge:
-		ChangeAnimation(Anim_Attack4, false, 70);
+		ChangeAnimation(Anim_Attack6, false, 30);
 		break;
 	case CXPlayer::State_Jump:
 		ChangeAnimation(Anim_Jump, false, 50);
@@ -403,7 +408,7 @@ void CXPlayer::ChangeState(PlayerState hState) {
 		ChangeAnimation(Anim_Attack1, false, 50);
 		break;
 	case CXPlayer::State_Strong_Attack:
-		ChangeAnimation(Anim_Attack4, false, 80);
+		ChangeAnimation(Anim_Attack5, false, 80);
 		break;
 	case CXPlayer::State_Hit:
 		ChangeAnimation(Anim_Hit1, false, 80);
