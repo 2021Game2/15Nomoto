@@ -143,14 +143,15 @@ void CXPlayer::Update()
 				mIn_Light_Attack = false;
 			}
 		}
-		else if (mAnimationIndex == 7)
+		else if (mAnimationIndex == 8)
 		{
 			if (mAnimationFrame >= mAnimationFrameSize)
 			{
-				ChangeAnimation(8, false, 30);
+				ChangeAnimation(0, true, 60);
+				mIn_Light_Attack = false;
 			}
 		}
-		else if (mAnimationIndex == 8)
+		else if (mAnimationIndex == 12)
 		{
 			if (mAnimationFrame >= mAnimationFrameSize)
 			{
@@ -241,15 +242,15 @@ void CXPlayer::Update()
 				ChangeState(State_Strong_Attack);
 				mIn_Strong_Attack = true;
 			}
-			else if (Move.Length() != 0.0f)
-			{
-				ChangeState(State_Walk);
-			}
 			else if (mJump_Flag == true) {
 				ChangeState(State_Jump);
 			}
 			else if (mDodge_Time > 0) {
 				ChangeState(State_Dodge);
+			}
+			else if (Move.Length() != 0.0f)
+			{
+				ChangeState(State_Walk);
 			}
 			else
 			{
@@ -340,7 +341,7 @@ void CXPlayer::Collision(CCollider* m, CCollider* o)
 			{
 				if (o->mTag == CCollider::ESWORD)
 				{
-					/*if (CCollider::Collision(m, o))
+					if (CCollider::Collision(m, o))
 					{
 						if (mIn_Defense == false) 
 						{
@@ -348,7 +349,7 @@ void CXPlayer::Collision(CCollider* m, CCollider* o)
 							{
 								mHp -= 1;
 								if (mHp <= 0) {
-									ChangeAnimation(11, false, 30);
+									ChangeState(State_Death);
 								}
 								if (mAnimationIndex == 11) {
 									if (mAnimationFrame >= mAnimationFrameSize)
@@ -358,7 +359,7 @@ void CXPlayer::Collision(CCollider* m, CCollider* o)
 								}
 							}
 						}
-					}*/
+					}
 				}
 			}
 		}
@@ -416,6 +417,7 @@ void CXPlayer::ChangeState(PlayerState hState) {
 	case CXPlayer::State_Blow:
 		break;
 	case CXPlayer::State_Death:
+		ChangeAnimation(Anim_Death1, false, 60);
 		break;
 	}
 }
