@@ -111,7 +111,7 @@ CVector CXPlayer::GetRot()
 void CXPlayer::Update()
 {
 	if (mHp > 0) {
-		if (mAnimationIndex == 3)
+		/*if (mAnimationIndex == 3)
 		{
 			if (mAnimationFrame >= mAnimationFrameSize)
 			{
@@ -143,12 +143,22 @@ void CXPlayer::Update()
 				mIn_Light_Attack = false;
 			}
 		}
-		else if (mAnimationIndex == 8)
+		else */if (mAnimationIndex == 8)
 		{
 			if (mAnimationFrame >= mAnimationFrameSize)
 			{
-				ChangeAnimation(0, true, 60);
+				ChangeAnimation(9, false, 50);
 				mIn_Light_Attack = false;
+			}
+		}
+		else if (mAnimationIndex == 9) {
+			if (mAnimationFrame >= mAnimationFrameSize) {
+				ChangeAnimation(10, false, 50);
+			}
+		}
+		else if (mAnimationIndex == 10) {
+			if (mAnimationFrame >= mAnimationFrameSize) {
+				ChangeAnimation(0, true, 60);
 			}
 		}
 		else if (mAnimationIndex == 12)
@@ -341,7 +351,7 @@ void CXPlayer::Collision(CCollider* m, CCollider* o)
 			{
 				if (o->mTag == CCollider::ESWORD)
 				{
-					if (CCollider::Collision(m, o))
+					/*if (CCollider::Collision(m, o))
 					{
 						if (mIn_Defense == false) 
 						{
@@ -351,15 +361,9 @@ void CXPlayer::Collision(CCollider* m, CCollider* o)
 								if (mHp <= 0) {
 									ChangeState(State_Death);
 								}
-								if (mAnimationIndex == 11) {
-									if (mAnimationFrame >= mAnimationFrameSize)
-									{
-										ChangeAnimation(12, false, 30);
-									}
-								}
 							}
 						}
-					}
+					}*/
 				}
 			}
 		}
@@ -407,9 +411,12 @@ void CXPlayer::ChangeState(PlayerState hState) {
 		break;
 	case CXPlayer::State_Light_Attack:
 		ChangeAnimation(Anim_Attack1, false, 50);
+		m_AttackParam.Damage = 1;
+		m_AttackParam.Type = HitType_Small;
+		m_AttackParam.KnockBackValue = 0.05f;
 		break;
 	case CXPlayer::State_Strong_Attack:
-		ChangeAnimation(Anim_Attack5, false, 80);
+		ChangeAnimation(Anim_Attack5, false, 70);
 		break;
 	case CXPlayer::State_Hit:
 		ChangeAnimation(Anim_Hit1, false, 80);

@@ -530,6 +530,12 @@ void ClEnemy::Collision(CCollider* m, CCollider* o)
 					CXPlayer* tPlayer = (CXPlayer*)o->mpParent;
 				}
 			}
+			if (o->mpParent->mTag == EPLAYER && m->mTag == CCollider::ESWORD)
+			{
+				if (CCollider::Collision(m, o)) {
+					TakeDamage(m_AttackParam, m_CharaParam);
+				}
+			}
 		}
 	}
 }

@@ -4,6 +4,7 @@
 #include "CXCharacter.h"
 #include "CCollider.h"
 #include "CTaskManager.h"
+#include "CBattleParam.h"
 
 class CXPlayer : public CXCharacter
 {
@@ -62,6 +63,8 @@ private:
 		Anim_Emotion2,
 		Anim_End
 	};
+	stAttackParam	m_AttackParam;
+	stCharaParam	m_CharaParam;
 
 public:
 	//ƒRƒ‰ƒCƒ_‚ÌéŒ¾
