@@ -99,7 +99,6 @@ private:
 	CVector m_HitVec;			//ヒット時ののけぞりベクトル
 	int		m_InvCnt;			//無敵時間
 	float	m_KnockBackValue;	//のけぞり係数
-	bool	m_IsAttackHit;		//攻撃判定フラグ
 	float	m_AttackMoveParam;	//攻撃時移動パラメータ
 	stAttackParam	m_AttackParam;	//攻撃時威力類パラメータ
 	stCharaParam	m_CharaParam;	//攻撃時渡す情報パラメータ
@@ -138,6 +137,9 @@ public:
 
 	//被弾処理
 	void TakeDamage(const stAttackParam& hAttackParam, const stCharaParam& hCharaParam);
+	bool	m_IsAttackHit;		//攻撃判定フラグ
+	static ClEnemy* GetInstance();
+	static ClEnemy* spInstance;		//敵のインスタンス 外部参照用
 };
 
 #endif

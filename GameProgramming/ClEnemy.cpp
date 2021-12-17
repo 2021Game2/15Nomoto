@@ -14,6 +14,7 @@
 #define NEAR_ATTACK_DIST 5.0f //‹ß‹——£UŒ‚”ÍˆÍ
 
 static const float move_speed = 0.03f;
+ClEnemy* ClEnemy::spInstance = 0;
 
 ClEnemy::ClEnemy()
 	:mColSphereBody(this, nullptr, CVector(0.5f, -1.0f, 0.0f), 1.0f)
@@ -63,11 +64,17 @@ ClEnemy::ClEnemy()
 	mColSylinderBody.mTag = CCollider::EBODY;
 	mColSylinderBody.mHeight = 5.0f;
 	//mColSphereShoulder.IsRender = true;
+
+	spInstance = this;
 }
 
 ClEnemy::~ClEnemy()
 {
 
+}
+ClEnemy* ClEnemy::GetInstance()
+{
+	return spInstance;
 }
 void ClEnemy::Init(CModelX* model)
 {
@@ -316,7 +323,7 @@ void ClEnemy::ChangeState(EnemyState hState)
 			if (tmp == 2) {
 				ChangeAnimation(Anim_Attack6, false, 70);
 				m_AttackParam.Damage = 2;
-				m_AttackParam.KnockBackValue = 0.5f;
+				m_AttackParam.KnockBackValue = 0.1f;
 				m_AttackParam.Type = HitType_Large;
 				m_AttackMoveParam = 0.08f;
 			}
@@ -530,7 +537,8 @@ void ClEnemy::Collision(CCollider* m, CCollider* o)
 					CXPlayer* tPlayer = (CXPlayer*)o->mpParent;
 				}
 			}
-			if (o->mpParent->mTag == EPLAYER && m->mTag == CCollider::ESWORD)
+			if (o->mpParent->mTag == EPLAYER && m->mTag == CCollider::ESWORD
+				&&CXPlayer::spInstance->mIn_Light_Attack==true)
 			{
 				if (CCollider::Collision(m, o)) {
 					TakeDamage(m_AttackParam, m_CharaParam);
@@ -544,7 +552,7 @@ void ClEnemy::TakeDamage(const stAttackParam& hAttackParam, const stCharaParam& 
 {
 	if (m_InvCnt <= 0) {
 		m_Hp -= hAttackParam.Damage;
-		m_InvCnt = 15;//–³“GŽžŠÔÝ’è@—v’²®
+		m_InvCnt = 30;//–³“GŽžŠÔÝ’è@—v’²®
 		if (m_Hp <= 0) {
 			ChangeState(State_Death);
 		}

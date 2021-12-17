@@ -6,6 +6,7 @@
 #include <math.h>
 #include "CEffect.h"
 #include "CXEnemy.h"
+#include "ClEnemy.h"
 #include "CCollisionManager.h"
 #include "CRes.h"
 
@@ -14,6 +15,7 @@
 #define DODGETIME 30	//回避時間
 #define GRAVITY 0.2	//重力加速度
 #define JUMP_SPEED 5	//ジャンプ初速
+#define INVTIME 30		//無敵時間
 
 CXPlayer *CXPlayer::spInstance = 0;
 
@@ -23,7 +25,6 @@ CXPlayer::CXPlayer()
 	, mColSphereSword(this, nullptr, CVector(-10.0f, 10.0f, 50.0f), 0.3f)
 	, mColSphereFoot(this, nullptr, CVector(0.0f,0.0f,0.0f), 0.8f)
 	, mHp(INITIALIZE)
-	, mAttack_switch(false)
 	, mIn_Light_Attack(false)
 	, mIn_Strong_Attack(false)
 	, mIn_Defense(false)
@@ -31,14 +32,12 @@ CXPlayer::CXPlayer()
 	, mDodge_Time(INITIALIZE)
 	, mJump(INITIALIZE)
 	, mJump_Flag(false)
-	, m_pos(0.0f, 0.0f, 0.0f)
-	, m_rot(0.0f, 0.0f, 0.0f)
-	, m_vec(0.0f, 0.0f, 0.0f)
-	, m_rad(0.5f)
+	,mInv_Cnt(INITIALIZE)
 {
 	//タグにプレイヤーを設定します
 	mTag = EPLAYER;
 	mColSphereSword.mTag = CCollider::ESWORD;
+	mColSphereBody.mTag = mColSphereHead.mTag =  CCollider::EBODY;
 	mHp = PLAYERHP;
 	spInstance = this;
 
@@ -111,44 +110,11 @@ CVector CXPlayer::GetRot()
 void CXPlayer::Update()
 {
 	if (mHp > 0) {
-		/*if (mAnimationIndex == 3)
-		{
-			if (mAnimationFrame >= mAnimationFrameSize)
-			{
-				ChangeAnimation(4, false, 20);
-			}
-		}
-		else if (mAnimationIndex == 4)
-		{
-			if (mAnimationFrame >= mAnimationFrameSize)
-			{
-				ChangeAnimation(0, true, 60);
-				mAttack_switch = true;
-				mIn_Light_Attack = false;
-			}
-		}
-		else if (mAnimationIndex == 5)
-		{
-			if (mAnimationFrame >= mAnimationFrameSize)
-			{
-				ChangeAnimation(6, false, 20);
-			}
-		}
-		else if (mAnimationIndex == 6)
-		{
-			if (mAnimationFrame >= mAnimationFrameSize)
-			{
-				ChangeAnimation(0, true, 60);
-				mAttack_switch = false;
-				mIn_Light_Attack = false;
-			}
-		}
-		else */if (mAnimationIndex == 8)
+		if (mAnimationIndex == 8)
 		{
 			if (mAnimationFrame >= mAnimationFrameSize)
 			{
 				ChangeAnimation(9, false, 50);
-				mIn_Light_Attack = false;
 			}
 		}
 		else if (mAnimationIndex == 9) {
@@ -159,6 +125,7 @@ void CXPlayer::Update()
 		else if (mAnimationIndex == 10) {
 			if (mAnimationFrame >= mAnimationFrameSize) {
 				ChangeAnimation(0, true, 60);
+				mIn_Light_Attack = false;
 			}
 		}
 		else if (mAnimationIndex == 12)
@@ -167,6 +134,11 @@ void CXPlayer::Update()
 			{
 				ChangeAnimation(0, true, 60);
 				mIn_Strong_Attack = false;
+			}
+		}
+		else if (mAnimationIndex == 14) {
+			if (mAnimationFrame >= mAnimationFrameSize) {
+				ChangeAnimation(0, true, 60);
 			}
 		}
 		else
@@ -239,12 +211,8 @@ void CXPlayer::Update()
 				}
 			}
 
-			if (CKey::Push('J') && mAttack_switch == false)
+			if (CKey::Push('J'))
 			{
-				ChangeState(State_Light_Attack);
-				mIn_Light_Attack = true;
-			}
-			else if (CKey::Push('J') && mAttack_switch == true) {
 				ChangeState(State_Light_Attack);
 				mIn_Light_Attack = true;
 			}
@@ -331,12 +299,12 @@ void CXPlayer::Update()
 			}
 		}
 	}
-	////モデルの座標を設定
-	//mPosition = m_pos;
-	//mRotation = m_rot * (180.0f / M_PI);
 	//注視点設定
 	Camera.SetTarget(mPosition);
 
+	if (mInv_Cnt > 0) {
+		mInv_Cnt--;
+	}
 
 	CXCharacter::Update();
 }
@@ -351,19 +319,28 @@ void CXPlayer::Collision(CCollider* m, CCollider* o)
 			{
 				if (o->mTag == CCollider::ESWORD)
 				{
-					/*if (CCollider::Collision(m, o))
+					if(m->mTag==CCollider::EBODY)
 					{
-						if (mIn_Defense == false) 
-						{
-							if (mIn_Dodge == false)
+						if(ClEnemy::spInstance->m_IsAttackHit==true){
+							if (CCollider::Collision(m, o))
 							{
-								mHp -= 1;
-								if (mHp <= 0) {
-									ChangeState(State_Death);
+								if (mInv_Cnt <= 0) {
+									if (mIn_Defense == false)
+									{
+										if (mIn_Dodge == false)
+										{
+											mHp -= 1;
+											mInv_Cnt = INVTIME;
+											ChangeState(State_Hit);
+											if (mHp <= 0) {
+												ChangeState(State_Death);
+											}
+										}
+									}
 								}
 							}
 						}
-					}*/
+					}
 				}
 			}
 		}
@@ -419,9 +396,10 @@ void CXPlayer::ChangeState(PlayerState hState) {
 		ChangeAnimation(Anim_Attack5, false, 70);
 		break;
 	case CXPlayer::State_Hit:
-		ChangeAnimation(Anim_Hit1, false, 80);
+		ChangeAnimation(Anim_Hit1, false, 40);
 		break;
 	case CXPlayer::State_Blow:
+		ChangeAnimation(Anim_Hit2, false, 40);
 		break;
 	case CXPlayer::State_Death:
 		ChangeAnimation(Anim_Death1, false, 60);

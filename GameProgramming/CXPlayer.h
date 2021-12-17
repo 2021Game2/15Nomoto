@@ -10,20 +10,12 @@ class CXPlayer : public CXCharacter
 {
 private:
 	int mHp;	//プレイヤーHP
-	bool mAttack_switch;	//弱攻撃切り替え用判定フラグ false:右から振りかぶり true:左から振りかぶり
 	bool mIn_Defense;		//防御判定フラグ false:防御していない true:防御中
 	bool mIn_Dodge;			//回避判定フラグ false:回避していない treu:回避中
 	int mDodge_Time;		//回避判定時間
 	float mJump;			//ジャンプ初速
 	bool mJump_Flag;		//ジャンプ判定フラグ false:着地している true:ジャンプ中
-	//座標
-	CVector m_pos;
-	//回転
-	CVector m_rot;
-	//移動ベクトル
-	CVector m_vec;
-	//半径
-	float m_rad;
+	int mInv_Cnt;			//無敵時間
 
 	enum PlayerState {
 		State_Idle = 0,
