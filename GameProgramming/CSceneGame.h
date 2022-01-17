@@ -5,13 +5,14 @@
 #include "CBillBoard2.h"
 #include "CSound.h"
 #include "CMap.h"
+#include "ClEnemy2.h"
 
 /*
 ゲームのシーン
 */
 class CSceneGame : public CScene {
 private:
-
+	ClEnemy2 enemy2;
 	//マップのインスタンス
 	CMap mMap;
 

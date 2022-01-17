@@ -28,6 +28,20 @@ public:
 	void Update();
 	//•`‰æˆ—
 	void Render();
+
+	enum Character_State {
+		State_Idle = 0,
+		State_Walk,
+		State_Run,
+		State_Dodge,
+		State_Jump,
+		State_Attack,
+		State_Light_Attack,
+		State_Strong_Attack,
+		State_Hit,
+		State_Blow,
+		State_Death,
+	};
 };
 
 #endif

@@ -11,7 +11,7 @@ class ClEnemyManager;
 class ClEnemy : public CXCharacter {
 	friend class ClEnemyManager;
 private:
-	enum EnemyState {
+	/*enum EnemyState {
 		State_Idle = 0,
 		State_Walk,
 		State_Run,
@@ -20,7 +20,7 @@ private:
 		State_Hit,
 		State_Blow,
 		State_Death,
-	};
+	};*/
 	enum AIState {
 		AI_Idle = 0,
 		AI_GetCloser,	//近づく
@@ -74,7 +74,7 @@ private:
 	float m_rad;
 
 	//状態
-	EnemyState m_State;
+	Character_State m_State;
 
 
 	//挙動
@@ -100,7 +100,6 @@ private:
 	int		m_InvCnt;			//無敵時間
 	float	m_KnockBackValue;	//のけぞり係数
 	float	m_AttackMoveParam;	//攻撃時移動パラメータ
-	stAttackParam	m_AttackParam;	//攻撃時威力類パラメータ
 	stCharaParam	m_CharaParam;	//攻撃時渡す情報パラメータ
 
 public:
@@ -111,7 +110,7 @@ public:
 	void Update();				//更新
 	void Render();				//描画
 	void StateUpdate();			//状態更新処理
-	void ChangeState(EnemyState hState);//状態変更処理
+	void ChangeState(Character_State hState);//状態変更処理
 	bool IsCanAction();			//アクション可能チェック
 	bool IsDamageAction();		//ダメージ中かチェック
 	void SetPos(CVector hPos);	//位置設定
@@ -135,8 +134,6 @@ public:
 	//m:自分のコライダ o:相手のコライダ
 	void Collision(CCollider* m, CCollider* o);
 
-	//被弾処理
-	void TakeDamage(const stAttackParam& hAttackParam, const stCharaParam& hCharaParam);
 	bool	m_IsAttackHit;		//攻撃判定フラグ
 	static ClEnemy* GetInstance();
 	static ClEnemy* spInstance;		//敵のインスタンス 外部参照用

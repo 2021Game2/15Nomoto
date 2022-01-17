@@ -371,37 +371,34 @@ void CXPlayer::TaskCollision()
 	CCollisionManager::Get()->Collision(&mColSphereSword, COLLISIONRANGE);
 }
 
-void CXPlayer::ChangeState(PlayerState hState) {
+void CXPlayer::ChangeState(Character_State hState) {
 	switch (hState)
 	{
-	case CXPlayer::State_Idle:
+	case State_Idle:
 		ChangeAnimation(Anim_Idle1, true, 300);
 		break;
-	case CXPlayer::State_Walk:
+	case State_Walk:
 		ChangeAnimation(Anim_Walk, true, 50);
 		break;
-	case CXPlayer::State_Dodge:
+	case State_Dodge:
 		ChangeAnimation(Anim_Attack6, false, 30);
 		break;
-	case CXPlayer::State_Jump:
+	case State_Jump:
 		ChangeAnimation(Anim_Jump, false, 50);
 		break;
-	case CXPlayer::State_Light_Attack:
+	case State_Light_Attack:
 		ChangeAnimation(Anim_Attack1, false, 50);
-		m_AttackParam.Damage = 1;
-		m_AttackParam.Type = HitType_Small;
-		m_AttackParam.KnockBackValue = 0.05f;
 		break;
-	case CXPlayer::State_Strong_Attack:
+	case State_Strong_Attack:
 		ChangeAnimation(Anim_Attack5, false, 70);
 		break;
-	case CXPlayer::State_Hit:
+	case State_Hit:
 		ChangeAnimation(Anim_Hit1, false, 40);
 		break;
-	case CXPlayer::State_Blow:
+	case State_Blow:
 		ChangeAnimation(Anim_Hit2, false, 40);
 		break;
-	case CXPlayer::State_Death:
+	case State_Death:
 		ChangeAnimation(Anim_Death1, false, 60);
 		break;
 	}

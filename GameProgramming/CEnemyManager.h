@@ -3,11 +3,13 @@
 
 
 #include "ClEnemy.h"
+#include "ClEnemy2.h"
 
 //“GŠÇ—ƒNƒ‰ƒX
 class ClEnemyManager
 {
 	friend ClEnemy;
+	friend ClEnemy2;
 
 
 private:

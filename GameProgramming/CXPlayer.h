@@ -17,7 +17,7 @@ private:
 	bool mJump_Flag;		//ジャンプ判定フラグ false:着地している true:ジャンプ中
 	int mInv_Cnt;			//無敵時間
 
-	enum PlayerState {
+	/*enum PlayerState {
 		State_Idle = 0,
 		State_Walk,
 		State_Dodge,
@@ -27,7 +27,7 @@ private:
 		State_Hit,
 		State_Blow,
 		State_Death,
-	};
+	};*/
 
 	enum Anim {
 		Anim_None = 0,
@@ -55,8 +55,6 @@ private:
 		Anim_Emotion2,
 		Anim_End
 	};
-	stAttackParam	m_AttackParam;
-	stCharaParam	m_CharaParam;
 
 public:
 	//コライダの宣言
@@ -90,7 +88,7 @@ public:
 
 	void TaskCollision();
 
-	void ChangeState(PlayerState hState);
+	void ChangeState(Character_State hState);
 };
 
 #endif

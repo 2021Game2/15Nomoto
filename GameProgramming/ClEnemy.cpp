@@ -24,7 +24,7 @@ ClEnemy::ClEnemy()
 	, mColSphereSword0(this, nullptr, CVector(0.7f, 3.5f, -0.2f), 0.5f)
 	, mColSphereSword1(this, nullptr, CVector(0.5f, 2.5f, -0.2f), 0.5f)
 	, mColSphereSword2(this, nullptr, CVector(0.3f, 1.5f, -0.2f), 0.5f)
-	, m_State(ClEnemy::State_Idle)
+	, m_State(State_Idle)
 	, m_pos(0.0f, 0.0f, 0.0f)
 	, m_rot(0.0f, 0.0f, 0.0f)
 	, m_vec(0.0f, 0.0f, 0.0f)
@@ -39,7 +39,7 @@ ClEnemy::ClEnemy()
 	, m_move_dir(0.0f, 0.0f, 0.0f)
 	, m_AiState(ClEnemy::AI_Idle)
 	, m_score(0)
-	, m_Hp(10)
+	, m_Hp(1)
 	, m_HitVec(0.0f, 0.0f, 0.0f)
 	, m_InvCnt(0)
 	, m_KnockBackValue(0.0f)
@@ -196,6 +196,10 @@ void ClEnemy::Update()
 	m_CharaParam.pos = m_pos;
 	//無敵時間更新
 	if (--m_InvCnt <= 0) m_InvCnt = 0;
+
+	if (m_Hp <= 0) {
+		ChangeState(State_Death);
+	}
 }
 
 
@@ -291,7 +295,7 @@ void ClEnemy::AutoMoveUpdate()
 
 
 
-void ClEnemy::ChangeState(EnemyState hState)
+void ClEnemy::ChangeState(Character_State hState)
 {
 
 	if (m_Hp <= 0) hState = State_Death;
@@ -314,17 +318,11 @@ void ClEnemy::ChangeState(EnemyState hState)
 			ChangeAnimation(Anim_Jump, false, 50);
 			break;
 		case State_Attack:
-			m_AttackParam.Damage = 1;
-			m_AttackParam.KnockBackValue = 0.1f;
-			m_AttackParam.Type = HitType_Small;
 			m_AttackMoveParam = 0.0f;
 			if (tmp == 0) ChangeAnimation(Anim_Attack1, false, 80);
 			if (tmp == 1) ChangeAnimation(Anim_Attack2, false, 95);
 			if (tmp == 2) {
 				ChangeAnimation(Anim_Attack6, false, 70);
-				m_AttackParam.Damage = 2;
-				m_AttackParam.KnockBackValue = 0.1f;
-				m_AttackParam.Type = HitType_Large;
 				m_AttackMoveParam = 0.08f;
 			}
 			m_IsAttackHit = true;
@@ -530,48 +528,23 @@ void ClEnemy::Collision(CCollider* m, CCollider* o)
 	{
 		if (o->mType == CCollider::ESPHERE)
 		{
-			if (o->mpParent->mTag == EPLAYER && (m->mTag == CCollider::ESWORD) && m_IsAttackHit)
+			if (o->mpParent->mTag == EPLAYER && m->mTag == CCollider::ESWORD)
 			{
 				if (CCollider::Collision(m, o))
 				{
 					CXPlayer* tPlayer = (CXPlayer*)o->mpParent;
 				}
 			}
-			if (o->mpParent->mTag == EPLAYER && m->mTag == CCollider::ESWORD
-				&&CXPlayer::spInstance->mIn_Light_Attack==true)
+			if (o->mpParent->mTag == EPLAYER && (o->mTag == CCollider::ESWORD))
 			{
 				if (CCollider::Collision(m, o)) {
-					TakeDamage(m_AttackParam, m_CharaParam);
+					//if (m_InvCnt <= 0) {
+						m_Hp -= 1;
+						//m_InvCnt = 30;//無敵時間設定　要調整
+						ChangeState(State_Hit);
+					//}
 				}
 			}
 		}
 	}
 }
-
-void ClEnemy::TakeDamage(const stAttackParam& hAttackParam, const stCharaParam& hCharaParam)
-{
-	if (m_InvCnt <= 0) {
-		m_Hp -= hAttackParam.Damage;
-		m_InvCnt = 30;//無敵時間設定　要調整
-		if (m_Hp <= 0) {
-			ChangeState(State_Death);
-		}
-		else {
-			m_KnockBackValue = hAttackParam.KnockBackValue;
-			if (hAttackParam.Type == HitType_Small) {
-				m_HitVec = (m_pos - hCharaParam.pos).Normalize();
-				ChangeState(State_Hit);
-			}
-			else if (hAttackParam.Type == HitType_Large) {
-				m_HitVec = hCharaParam.MoveDir;
-				ChangeState(State_Blow);
-			}
-		}
-	}
-}
-
-
-
-
-
-
