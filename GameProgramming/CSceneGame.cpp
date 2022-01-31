@@ -25,7 +25,7 @@ CSceneGame::~CSceneGame()
 
 void CSceneGame::Init() {
 	//テキストフォントの読み込みと設定
-	mFont.LoadTexture("FontG.png", 1, 4096 / 64);
+	mFont.LoadTexture("Resource\\FontG.png", 1, 4096 / 64);
 
 	//キャラクターにモデルを設定
 	CRes::sModelX.Load(MODEL_FILE);
@@ -42,6 +42,7 @@ void CSceneGame::Init() {
 
 	//カメラ初期化
 	Camera.Init();
+
 }
 
 
@@ -60,7 +61,10 @@ void CSceneGame::Update() {
 	//衝突処理
 	CCollisionManager::Get()->Collision();
 
+	CTaskManager::Get()->TaskCollision();
+
 	Camera.Update();
+
 
 	return;
 }

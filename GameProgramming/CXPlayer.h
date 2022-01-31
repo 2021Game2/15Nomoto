@@ -16,6 +16,9 @@ private:
 	float mJump;			//ジャンプ初速
 	bool mJump_Flag;		//ジャンプ判定フラグ false:着地している true:ジャンプ中
 	int mInv_Cnt;			//無敵時間
+	bool mAttack_Combo;		//連続攻撃判定 false:最初の攻撃 true:攻撃の派生
+	int mAttack_Combo_Time;	//連続攻撃の受付時間
+	int mAttack_Combo_Count;//連続攻撃カウント
 
 	/*enum PlayerState {
 		State_Idle = 0,

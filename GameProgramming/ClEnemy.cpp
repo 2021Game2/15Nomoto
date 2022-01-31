@@ -8,6 +8,7 @@
 #include "CKey.h"
 #include "CRes.h"
 #include "main.h"
+#include "CCollisionManager.h"
 
 #define GRAVITY	(9.8f/60.0f/4.0f) 
 #define BORDER_DIST 15.0f//反応距離限界値
@@ -55,7 +56,7 @@ ClEnemy::ClEnemy()
 	mColSphereSword2.mTag = CCollider::ESWORD;
 	mColSphereBody.mTag = CCollider::EBODY;
 
-	mColSphereShoulder.mTag = CCollider::ESWORD;
+	//mColSphereShoulder.mTag = CCollider::ESWORD;
 	//mColSphereSword0.IsRender = true;
 	//mColSphereSword1.IsRender = true;
 	//mColSphereSword2.IsRender = true;
@@ -197,9 +198,6 @@ void ClEnemy::Update()
 	//無敵時間更新
 	if (--m_InvCnt <= 0) m_InvCnt = 0;
 
-	if (m_Hp <= 0) {
-		ChangeState(State_Death);
-	}
 }
 
 
@@ -524,27 +522,45 @@ CVector ClEnemy::GetPos()
 }
 void ClEnemy::Collision(CCollider* m, CCollider* o)
 {
-	if (m->mType == CCollider::ESPHERE)
+	if (m->mType == CCollider::ESYLINDER)
 	{
 		if (o->mType == CCollider::ESPHERE)
 		{
-			if (o->mpParent->mTag == EPLAYER && m->mTag == CCollider::ESWORD)
+			if (o->mpParent->mTag == EPLAYER)
 			{
-				if (CCollider::Collision(m, o))
+				if (o->mTag == CCollider::ESWORD)
 				{
-					CXPlayer* tPlayer = (CXPlayer*)o->mpParent;
-				}
-			}
-			if (o->mpParent->mTag == EPLAYER && (o->mTag == CCollider::ESWORD))
-			{
-				if (CCollider::Collision(m, o)) {
-					//if (m_InvCnt <= 0) {
+					if (CCollider::Collision(m, o))
+					{
 						m_Hp -= 1;
-						//m_InvCnt = 30;//無敵時間設定　要調整
 						ChangeState(State_Hit);
-					//}
+						if (m_Hp <= 0) 
+						{
+							ChangeState(State_Death);
+						}
+					}
 				}
+
 			}
 		}
 	}
+}
+
+void ClEnemy::TaskCollision() 
+{
+	mColSphereBody.ChangePriority();
+	mColSylinderBody.ChangePriority();
+	mColSphereHead.ChangePriority();
+	mColSphereShoulder.ChangePriority();
+	mColSphereSword0.ChangePriority();
+	mColSphereSword1.ChangePriority();
+	mColSphereSword2.ChangePriority();
+
+	CCollisionManager::Get()->Collision(&mColSphereBody, COLLISIONRANGE);
+	CCollisionManager::Get()->Collision(&mColSylinderBody, COLLISIONRANGE);
+	CCollisionManager::Get()->Collision(&mColSphereHead, COLLISIONRANGE);
+	CCollisionManager::Get()->Collision(&mColSphereShoulder, COLLISIONRANGE);
+	CCollisionManager::Get()->Collision(&mColSphereSword0, COLLISIONRANGE);
+	CCollisionManager::Get()->Collision(&mColSphereSword1, COLLISIONRANGE);
+	CCollisionManager::Get()->Collision(&mColSphereSword2, COLLISIONRANGE);
 }

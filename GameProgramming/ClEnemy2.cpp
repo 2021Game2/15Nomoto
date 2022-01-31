@@ -2,13 +2,13 @@
 
 CModelX ClEnemy2::mModel;
 
-#define MODEL "felguard\\felguard-X.X"
+#define ENEMY2_MODEL "Resource\\felguard\\felguard-X.X"
 
 ClEnemy2::ClEnemy2()
 {
 	if (mModel.mFrame.size() == 0)
 	{
-		mModel.Load(MODEL);
+		mModel.Load(ENEMY2_MODEL);
 		//mModel.SeparateAnimationSet(0, 0, 700, "Idle");
 		
 	}
@@ -31,4 +31,9 @@ ClEnemy2::ClEnemy2()
 
 ClEnemy2::~ClEnemy2()
 {
+}
+
+void ClEnemy2::Init(CModelX* model)
+{
+	CXCharacter::Init(model);
 }

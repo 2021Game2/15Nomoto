@@ -37,6 +37,8 @@ public:
 		State_Jump,
 		State_Attack,
 		State_Light_Attack,
+		State_Light_Attack2,
+		State_Light_Attack3,
 		State_Strong_Attack,
 		State_Hit,
 		State_Blow,

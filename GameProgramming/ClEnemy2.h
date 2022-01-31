@@ -7,9 +7,10 @@ class ClEnemy2 :public CXCharacter
 	static CModelX mModel;
 
 public:
-
+	
 	ClEnemy2();
 	~ClEnemy2();
+	void Init(CModelX* model);	//‰Šú‰»
 
 
 };

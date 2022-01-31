@@ -3,6 +3,8 @@
 #include <algorithm>
 #include "CRes.h"
 
+#define ENEMY_MODEL "Resource\\knight\\knight_low.x"
+
 //スコア並べ替え用
 bool comp(const ClEnemy* lh, const ClEnemy* rh) {
 
@@ -14,7 +16,7 @@ ClEnemyManager* ClEnemyManager::m_Instance;
 ClEnemyManager::ClEnemyManager()
 	:m_NearTarget(NULL)
 {
-	CRes::sKnight.Load("knight\\knight_low.x");
+	CRes::sKnight.Load(ENEMY_MODEL);
 	CRes::sKnight.SeparateAnimationSet(0, 0, 5, "Tpose");
 	CRes::sKnight.SeparateAnimationSet(0, 10, 80, "walk");
 	CRes::sKnight.SeparateAnimationSet(0, 90, 160, "walk_backwards");
@@ -39,8 +41,10 @@ ClEnemyManager::ClEnemyManager()
 	CRes::sKnight.SeparateAnimationSet(0, 1930, 2040, "emotion_2");
 
 }
-ClEnemyManager::~ClEnemyManager() {
-	for (size_t i = 0; i < m_EnemyList.size(); i++) {
+ClEnemyManager::~ClEnemyManager() 
+{
+	for (size_t i = 0; i < m_EnemyList.size(); i++) 
+	{
 		delete m_EnemyList[i];
 	}
 }
@@ -51,7 +55,8 @@ void ClEnemyManager::Generate()
 }
 void ClEnemyManager::Release()
 {
-	if (m_Instance) {
+	if (m_Instance)
+	{
 		delete m_Instance;
 		m_Instance = NULL;
 	}
@@ -64,7 +69,8 @@ ClEnemyManager* ClEnemyManager::GetInstance()
 
 void ClEnemyManager::EnemyGenerate(int num)
 {
-	for (int i = 0; i < 1; i++) {
+	for (int i = 0; i < 1; i++)
+	{
 		CVector tPos;
 		tPos.Set(0, 0, 0);
 		//		tPos.mY += -3.0f + (float)(rand() % 6);
@@ -81,14 +87,16 @@ ClEnemy* ClEnemyManager::GetNearEnemy()
 {
 	return m_NearTarget;
 }
-void ClEnemyManager::Update() {
+void ClEnemyManager::Update()
+{
 	AIUpdate();
 
 	for (size_t i = 0; i < m_EnemyList.size(); i++) {
 		m_EnemyList[i]->Update();
 	}
 }
-void ClEnemyManager::Render() {
+void ClEnemyManager::Render() 
+{
 	for (size_t i = 0; i < m_EnemyList.size(); i++) {
 		m_EnemyList[i]->Render();
 	}
@@ -132,6 +140,4 @@ void ClEnemyManager::AIUpdate()
 			}
 		}
 	}
-
-
 }

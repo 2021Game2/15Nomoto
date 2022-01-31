@@ -96,7 +96,7 @@ void CModelX::Load(char* file)
 	//スキンマトリックスのエリア作成
 	mpSkinningMatrix = new CMatrix[mFrame.size()];
 	//シェーダー読み込み
-	mShader.Load("skinmesh.vert", "skinmesh.flag");
+	mShader.Load("Resource\\skinmesh.vert", "Resource\\skinmesh.flag");
 
 }
 /*

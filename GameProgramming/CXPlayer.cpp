@@ -11,11 +11,12 @@
 #include "CRes.h"
 
 #define INITIALIZE 0	//初期化
-#define PLAYERHP 100	//プレイヤーHP初期値
+#define PLAYERHP 10	//プレイヤーHP初期値
 #define DODGETIME 30	//回避時間
 #define GRAVITY 0.2	//重力加速度
 #define JUMP_SPEED 5	//ジャンプ初速
 #define INVTIME 30		//無敵時間
+#define COMBO_TIME 30	//連続攻撃受付時間
 
 CXPlayer *CXPlayer::spInstance = 0;
 
@@ -23,7 +24,7 @@ CXPlayer::CXPlayer()
 	: mColSphereBody(this, nullptr, CVector(), 0.5f)
 	, mColSphereHead(this, nullptr, CVector(0.0f, 5.0f, -3.0f), 0.5f)
 	, mColSphereSword(this, nullptr, CVector(-10.0f, 10.0f, 50.0f), 0.3f)
-	, mColSphereFoot(this, nullptr, CVector(0.0f,0.0f,0.0f), 0.8f)
+	, mColSphereFoot(this, nullptr, CVector(0.0f, 0.0f, 0.0f), 0.8f)
 	, mHp(INITIALIZE)
 	, mIn_Light_Attack(false)
 	, mIn_Strong_Attack(false)
@@ -32,7 +33,10 @@ CXPlayer::CXPlayer()
 	, mDodge_Time(INITIALIZE)
 	, mJump(INITIALIZE)
 	, mJump_Flag(false)
-	,mInv_Cnt(INITIALIZE)
+	, mInv_Cnt(INITIALIZE)
+	, mAttack_Combo(false)
+	, mAttack_Combo_Time(INITIALIZE)
+	, mAttack_Combo_Count(INITIALIZE)
 {
 	//タグにプレイヤーを設定します
 	mTag = EPLAYER;
@@ -80,6 +84,7 @@ void CXPlayer::Init(CModelX* model)
 	mColSphereFoot.mpMatrix = &mpCombinedMatrix[0];
 
 	mRotation.mY = 0.01f;
+	
 }
 
 void CXPlayer::Generate() 
@@ -114,18 +119,26 @@ void CXPlayer::Update()
 		{
 			if (mAnimationFrame >= mAnimationFrameSize)
 			{
-				ChangeAnimation(9, false, 50);
-			}
-		}
-		else if (mAnimationIndex == 9) {
-			if (mAnimationFrame >= mAnimationFrameSize) {
-				ChangeAnimation(10, false, 50);
-			}
-		}
-		else if (mAnimationIndex == 10) {
-			if (mAnimationFrame >= mAnimationFrameSize) {
 				ChangeAnimation(0, true, 60);
-				mIn_Light_Attack = false;
+				mAttack_Combo_Time = COMBO_TIME;
+				mAttack_Combo_Count += 1;
+			}
+		}
+		else if (mAnimationIndex == 9) 
+		{
+			if (mAnimationFrame >= mAnimationFrameSize) 
+			{
+				ChangeAnimation(0, true, 60);
+				mAttack_Combo_Time = COMBO_TIME;
+				mAttack_Combo_Count += 1;
+			}
+		}
+		else if (mAnimationIndex == 10) 
+		{
+			if (mAnimationFrame >= mAnimationFrameSize)
+			{
+				ChangeAnimation(0, true, 60);
+				mAttack_Combo_Count = 0;
 			}
 		}
 		else if (mAnimationIndex == 12)
@@ -136,8 +149,10 @@ void CXPlayer::Update()
 				mIn_Strong_Attack = false;
 			}
 		}
-		else if (mAnimationIndex == 14) {
-			if (mAnimationFrame >= mAnimationFrameSize) {
+		else if (mAnimationIndex == 14) 
+		{
+			if (mAnimationFrame >= mAnimationFrameSize) 
+			{
 				ChangeAnimation(0, true, 60);
 			}
 		}
@@ -211,19 +226,33 @@ void CXPlayer::Update()
 				}
 			}
 
-			if (CKey::Push('J'))
+			if (CKey::Once('J'))
 			{
-				ChangeState(State_Light_Attack);
-				mIn_Light_Attack = true;
+				if (mAttack_Combo == false)
+				{
+					ChangeState(State_Light_Attack);
+					mIn_Light_Attack = true;
+				}
+				else if (mAttack_Combo_Count == 1)
+				{
+					ChangeState(State_Light_Attack2);
+				}
+				else if (mAttack_Combo_Count == 2)
+				{
+					ChangeState(State_Light_Attack3);
+				}
 			}
-			else if (CKey::Push('K')) {
+			else if (CKey::Push('K'))
+			{
 				ChangeState(State_Strong_Attack);
 				mIn_Strong_Attack = true;
 			}
-			else if (mJump_Flag == true) {
+			else if (mJump_Flag == true) 
+			{
 				ChangeState(State_Jump);
 			}
-			else if (mDodge_Time > 0) {
+			else if (mDodge_Time > 0) 
+			{
 				ChangeState(State_Dodge);
 			}
 			else if (Move.Length() != 0.0f)
@@ -265,10 +294,12 @@ void CXPlayer::Update()
 			if (tCheck.turn > 1.5f) tCheck.turn = 1.5f;
 
 			//移動方向へキャラを向かせる
-			if (tCheck.cross > 0.0f) {
+			if (tCheck.cross > 0.0f) 
+			{
 				mRotation.mY += tCheck.turn * turnspeed;
 			}
-			if (tCheck.cross < 0.0f) {
+			if (tCheck.cross < 0.0f)
+			{
 				mRotation.mY -= tCheck.turn * turnspeed;
 			}
 
@@ -305,8 +336,18 @@ void CXPlayer::Update()
 	if (mInv_Cnt > 0) {
 		mInv_Cnt--;
 	}
+	if (mAttack_Combo_Time>0) {
+		mAttack_Combo_Time--;
+		mAttack_Combo = true;
+	}
+	else {
+		mAttack_Combo = false;
+		mAttack_Combo_Count = 0;
+	}
 
 	CXCharacter::Update();
+	
+	
 }
 
 void CXPlayer::Collision(CCollider* m, CCollider* o)
@@ -317,14 +358,23 @@ void CXPlayer::Collision(CCollider* m, CCollider* o)
 		{
 			if (o->mpParent->mTag == EENEMY)
 			{
+				if (m->mTag == CCollider::ESWORD)
+				{
+					if (o->mpParent->mTag == EENEMY)
+					{
+						o->mpParent->Collision(o, m);
+					}
+				}
 				if (o->mTag == CCollider::ESWORD)
 				{
 					if(m->mTag==CCollider::EBODY)
 					{
-						if(ClEnemy::spInstance->m_IsAttackHit==true){
+						if(mHp>=0)
+						{
 							if (CCollider::Collision(m, o))
 							{
-								if (mInv_Cnt <= 0) {
+								if (mInv_Cnt <= 0)
+								{
 									if (mIn_Defense == false)
 									{
 										if (mIn_Dodge == false)
@@ -332,12 +382,17 @@ void CXPlayer::Collision(CCollider* m, CCollider* o)
 											mHp -= 1;
 											mInv_Cnt = INVTIME;
 											ChangeState(State_Hit);
-											if (mHp <= 0) {
-												ChangeState(State_Death);
-											}
+											
 										}
 									}
 								}
+							}
+						}
+						else {
+							if (mHp <= 0)
+							{
+								ChangeState(State_Death);
+								return;
 							}
 						}
 					}
@@ -388,6 +443,12 @@ void CXPlayer::ChangeState(Character_State hState) {
 		break;
 	case State_Light_Attack:
 		ChangeAnimation(Anim_Attack1, false, 50);
+		break;
+	case State_Light_Attack2:
+		ChangeAnimation(Anim_Attack2, false, 50);
+		break;
+	case State_Light_Attack3:
+		ChangeAnimation(Anim_Attack3, false, 50);
 		break;
 	case State_Strong_Attack:
 		ChangeAnimation(Anim_Attack5, false, 70);

@@ -1,8 +1,8 @@
 #include "CMap.h"
 #include "CColliderMesh.h"
 
-#define OBJ "sky.obj"
-#define MTL "sky.mtl"
+#define OBJ "Resource\\sky.obj"
+#define MTL "Resource\\sky.mtl"
 
 CColliderMesh mColliderMesh;
 

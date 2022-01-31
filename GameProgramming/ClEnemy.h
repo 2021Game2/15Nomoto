@@ -137,6 +137,7 @@ public:
 	bool	m_IsAttackHit;		//攻撃判定フラグ
 	static ClEnemy* GetInstance();
 	static ClEnemy* spInstance;		//敵のインスタンス 外部参照用
+	void TaskCollision();
 };
 
 #endif
